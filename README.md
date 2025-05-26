@@ -32,7 +32,6 @@ lazy.nvim
 
 ### **Quality**
 - none-ls: Formatting/linting framework
-- Copilot.lua: Optional GitHub Copilot integration
 
 ## Key Settings
 

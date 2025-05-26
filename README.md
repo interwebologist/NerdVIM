@@ -1,41 +1,23 @@
-# Neovim Configuration README
+# Neovim Configuration
 
-Modern Neovim setup focused on AI-assisted development and modern tooling. 
+A modern Neovim setup focused on AI-assisted development, Python/Bash support, and efficient workflows.
 
-## Core Features
-### **Plugin Manager**
-lazy.nvim
+## Features
 
-### **Theme**
-- **Dracula.nvim**: Default colorscheme with classic Dracula styling.
-
-### **AI Integration**
-- **Avante.nvim**: Claude 3.5 Sonnet AI assistant (Anthropic API required)
-  - Keymaps:
-    - `<leader>aa`: Ask AI
-    - `<leader>ae`: Edit with AI
-    - `<leader>ar`: Refresh response
-  - Configured for code analysis without auto-suggestions
-
-### **Language Support**
-- **LSP**: Pyright (Python) + bashls (Bash)
-- **Treesitter**: Advanced syntax highlighting/parsing
-
-### **Workflow Tools**
-- **File Management**:
-  - Neo-tree (v3): File explorer
-  - Telescope: Fuzzy finder (needs keymap setup)
-- **Editing**:
-  - LuaSnip: Snippet engine with VSCode snippets
-  - nvim-cmp: Autocomplete (LSP, snippets, buffers, paths)
-  - Tab/S-Tab: Snippet navigation
-
-### **Quality**
-- none-ls: Formatting/linting framework
+- **Plugin Manager:** lazy.nvim
+- **Theme:** Dracula
+- **AI Assistant:** Claude 3.5 Sonnet via Avante.nvim  
+  - Keymaps: `<leader>aa` (Ask), `<leader>ae` (Edit), `<leader>ar` (Refresh)
+- **LSP:** Python (Pyright), Bash (bashls)
+- **Syntax Highlighting:** Treesitter
+- **File Explorer:** Neo-tree (v3)
+- **Fuzzy Finder:** Telescope
+- **Snippets:** LuaSnip (VSCode snippets, Tab/S-Tab navigation)
+- **Autocomplete:** nvim-cmp (LSP, snippets, buffer, path)
+- **Format/Lint:** none-ls
 
 ## Key Settings
 
-vim.o.number = true -- Line numbers
-vim.g.mapleader = " " -- Space as leader key
-
-
+```lua
+vim.o.number = true
+vim.g.mapleader = " "

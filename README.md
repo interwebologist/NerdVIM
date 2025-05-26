@@ -1,8 +1,10 @@
 # Neovim Configuration README
 
-Modern Neovim setup focused on AI-assisted development and modern tooling. Built with `lazy.nvim`.
+Modern Neovim setup focused on AI-assisted development and modern tooling. 
 
 ## Core Features
+### **Plugin Manager**
+lazy.nvim
 
 ### **Theme**
 - **Dracula.nvim**: Default colorscheme with classic Dracula styling.

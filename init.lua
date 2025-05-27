@@ -25,40 +25,46 @@ require("lazy").setup({
       vim.cmd[[colorscheme dracula]]
     end,
   },
-  {
-    "yetone/avante.nvim",
-    event = "VeryLazy",
-    build = "make",
-    opts = {
-      provider = "claude",
-      claude = {
-        endpoint = "https://api.anthropic.com",
-        model = "claude-3-5-sonnet-20241022",
-        temperature = 0,
-        max_tokens = 4096,
-      },
-      behaviour = {
-        auto_suggestions = false,
-        auto_set_highlight_group = true,
-        auto_set_keymaps = true,
-        auto_apply_diff_after_generation = false,
-        support_paste_from_clipboard = false,
-      },
-      mappings = {
-        ask = "<leader>aa",
-        edit = "<leader>ae",
-        refresh = "<leader>ar",
-      },
+{
+  "yetone/avante.nvim",
+  event = "VeryLazy",
+  build = "make",
+  -- Keymaps must be at this level (not inside opts)
+  keys = {
+    { "<leader>at", "<cmd>AvanteToggle<CR>", mode = "n", desc = "Toggle Avante" },
+  },
+  opts = {
+    provider = "claude",
+    claude = {
+      endpoint = "https://api.anthropic.com",
+      model = "claude-3-5-sonnet-20241022",
+      temperature = 0,
+      max_tokens = 4096,
     },
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter",
-      "stevearc/dressing.nvim",
-      "nvim-lua/plenary.nvim",
-      "MunifTanjim/nui.nvim",
-      "nvim-tree/nvim-web-devicons",
-      "zbirenbaum/copilot.lua",
+    behaviour = {
+      auto_suggestions = false,
+      auto_set_highlight_group = true,
+      auto_set_keymaps = false, -- Changed to false to prevent conflict[3]
+      auto_apply_diff_after_generation = false,
+      support_paste_from_clipboard = false,
+    },
+    mappings = {
+      ask = "<leader>aa",
+      edit = "<leader>ae",
+      refresh = "<leader>ar",
+      toggle = "<leader>at",
     },
   },
+  -- Dependencies must be at this level (not inside opts)
+  dependencies = {
+    "nvim-treesitter/nvim-treesitter",
+    "stevearc/dressing.nvim",
+    "nvim-lua/plenary.nvim",
+    "MunifTanjim/nui.nvim",
+    "nvim-tree/nvim-web-devicons",
+    "zbirenbaum/copilot.lua",
+  },
+},
   { "nvim-neo-tree/neo-tree.nvim", branch = "v3.x" },
   { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
   { "nvimtools/none-ls.nvim" },

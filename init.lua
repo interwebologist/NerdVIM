@@ -1,8 +1,21 @@
--- Basic settings
-vim.o.number = true
-vim.g.mapleader = " "
+vim.opt.undofile = true
+vim.opt.undodir = "~/.config/nvim/undo"
+vim.opt.clipboard = "unnamedplus" -- Clipboard integration
+vim.o.tabstop = 4               -- Number of spaces a tab counts for
+vim.o.shiftwidth = 4            -- Number of spaces for each indentation
+vim.o.expandtab = true          -- Convert tabs to spaces
+vim.o.smartindent = true        -- Smart autoindenting on new lines
+vim.o.wrap = false              -- Disable line wrapping
+vim.o.cursorline = true         -- Highlight the current line
+vim.o.termguicolors = true      -- Enable 24-bit RGB colors
+vim.o.number = true             -- Show line numbers
+vim.g.mapleader = "\\" -- Set space as the leader key
+vim.keymap.set("n", "<leader>t", function()
+      vim.cmd("botright split | resize 10 | terminal")
+  end, { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>m", "<C-w>_<CR>", { noremap = true, silent = true }) -- Maximize current window
 
--- Bootstrap lazy.nvim if not installed
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -16,7 +29,49 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup({
+require("lazy").setup({  
+--  {
+--      'zbirenbaum/copilot.lua',
+--      cmd = 'Copilot',
+--      event = 'InsertEnter',
+--      config = true,
+--   },
+--
+{
+    "CopilotC-Nvim/CopilotChat.nvim",
+    dependencies = {
+      { "github/copilot.vim" }, -- or zbirenbaum/copilot.lua
+      { "nvim-lua/plenary.nvim", branch = "master" }, -- for curl, log and async functions
+    },
+    build = "make tiktoken", -- Only on MacOS or Linux
+    opts = {
+      -- See Configuration section for options
+    },
+    -- See Commands section for default commands if you want to lazy load on them
+  },
+  {
+    's1n7ax/nvim-window-picker',
+    name = 'window-picker',
+    event = 'VeryLazy',
+    version = '2.*',
+    config = function()
+      require'window-picker'.setup()
+    end,
+  },
+
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    opts = {
+      -- add any options here
+    },
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      -- Optional: for notification view
+      "rcarriga/nvim-notify",
+    },
+  },
+
   {
     "Mofiqul/dracula.nvim",
     priority = 1000,
@@ -25,49 +80,52 @@ require("lazy").setup({
       vim.cmd[[colorscheme dracula]]
     end,
   },
-{
-  "yetone/avante.nvim",
-  event = "VeryLazy",
-  build = "make",
-  -- Keymaps must be at this level (not inside opts)
-  keys = {
-    { "<leader>at", "<cmd>AvanteToggle<CR>", mode = "n", desc = "Toggle Avante" },
-  },
-  opts = {
-    provider = "claude",
-    claude = {
-      endpoint = "https://api.anthropic.com",
-      model = "claude-3-5-sonnet-20241022",
-      temperature = 0,
-      max_tokens = 4096,
+
+  {
+    "yetone/avante.nvim",
+    event = "VeryLazy",
+    build = "make",
+    keys = {
+    --  { "at", "AvanteToggle", mode = "n", desc = "Toggle Avante" },
     },
-    behaviour = {
-      auto_suggestions = false,
-      auto_set_highlight_group = true,
-      auto_set_keymaps = false, -- Changed to false to prevent conflict[3]
-      auto_apply_diff_after_generation = false,
-      support_paste_from_clipboard = false,
+    opts = {
+      provider = "claude",
+      claude = {
+        endpoint = "https://api.anthropic.com",
+        model = "claude-3-5-sonnet-20241022",
+        temperature = 0,
+        max_tokens = 4096,
+      },
+      behaviour = {
+        auto_suggestions = false,
+        auto_set_highlight_group = true,
+        auto_set_keymaps = false, -- prevent conflict
+        auto_apply_diff_after_generation = false,
+        support_paste_from_clipboard = false,
+      },
+--      mappings = {
+--        ask = "<leader>aa",
+--        edit = "ae",
+--        refresh = "ar",
+--        toggle = "at",
+--      },
     },
-    mappings = {
-      ask = "<leader>aa",
-      edit = "<leader>ae",
-      refresh = "<leader>ar",
-      toggle = "<leader>at",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "stevearc/dressing.nvim",
+      "nvim-lua/plenary.nvim",
+      "MunifTanjim/nui.nvim",
+      "nvim-tree/nvim-web-devicons",
+      "zbirenbaum/copilot.lua",
     },
   },
-  -- Dependencies must be at this level (not inside opts)
-  dependencies = {
-    "nvim-treesitter/nvim-treesitter",
-    "stevearc/dressing.nvim",
-    "nvim-lua/plenary.nvim",
-    "MunifTanjim/nui.nvim",
-    "nvim-tree/nvim-web-devicons",
-    "zbirenbaum/copilot.lua",
-  },
-},
+
   { "nvim-neo-tree/neo-tree.nvim", branch = "v3.x" },
+
   { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+
   { "nvimtools/none-ls.nvim" },
+
   {
     "neovim/nvim-lspconfig",
     config = function()
@@ -75,20 +133,22 @@ require("lazy").setup({
       require("lspconfig").bashls.setup {}
     end,
   },
+
   {
     "L3MON4D3/LuaSnip",
     dependencies = { "honza/vim-snippets" },
     config = function()
       require("luasnip.loaders.from_vscode").lazy_load()
       -- Optional: Keymaps for snippet navigation
-      vim.keymap.set({"i", "s"}, "<Tab>", function()
-        return require("luasnip").jump(1) or "<Tab>"
+      vim.keymap.set({"i", "s"}, "<C-j>", function()
+        return require("luasnip").jump(1) or ""
       end, {expr = true})
-      vim.keymap.set({"i", "s"}, "<S-Tab>", function()
-        return require("luasnip").jump(-1) or "<S-Tab>"
+      vim.keymap.set({"i", "s"}, "<C-k>", function()
+        return require("luasnip").jump(-1) or ""
       end, {expr = true})
     end,
   },
+
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
@@ -114,9 +174,68 @@ require("lazy").setup({
       })
     end,
   },
+
   {
     "nvim-telescope/telescope.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
   },
-})
 
+  -- Linting setup
+  {
+    "mfussenegger/nvim-lint",
+    event = { "BufReadPre", "BufNewFile" },
+    config = function()
+      local lint = require("lint")
+      lint.linters_by_ft = {
+        lua = { "luacheck" },
+        -- Add other filetypes and their linters here
+        -- python = { "pylint" },
+        -- javascript = { "eslint" },
+      }
+
+      lint.linters.luacheck = lint.linters.luacheck or {}
+      lint.linters.luacheck.args = {
+        "--no-unused-args",
+        "--std",
+        "luajit",
+        "--globals",
+        "vim",
+        "--globals",
+        "awesome",
+        "--globals",
+        "client",
+        "--globals",
+        "root",
+      }
+
+      -- Automatically lint after writing and when entering a buffer
+      vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter" }, {
+        callback = function()
+          require("lint").try_lint()
+        end,
+      })
+
+      -- Command to manually trigger linting
+      vim.api.nvim_create_user_command("Lint", function()
+        require("lint").try_lint()
+      end, {})
+    end,
+  },
+
+  {
+    "stevearc/conform.nvim",
+    event = { "BufWritePre" },
+    cmd = { "ConformInfo" },
+    config = function()
+      require("conform").setup({
+        formatters_by_ft = {
+          lua = { "stylua" },
+        },
+        format_on_save = {
+          timeout_ms = 500,
+          lsp_fallback = true,
+        },
+      })
+    end,
+  },
+})

@@ -1,3 +1,4 @@
+vim.o.statusline = '%{getcwd()} [%{get(b:, "branch_name", "")}]'
 vim.opt.undofile = true
 vim.opt.undodir = "~/.config/nvim/undo"
 vim.opt.clipboard = "unnamedplus" -- Clipboard integration
@@ -14,6 +15,7 @@ vim.keymap.set("n", "<leader>t", function()
       vim.cmd("botright split | resize 10 | terminal")
   end, { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>m", "<C-w>_<Enter>", { noremap = true, silent = true }) -- Maximize current window
+
 vim.keymap.set("n", "<leader>np", function()
   -- 1. Prompt user for input
   local prompt = vim.fn.input("Prompt for nerdprompt: ")
@@ -32,6 +34,17 @@ vim.keymap.set("n", "<leader>np", function()
     vim.fn.feedkeys('nerdprompt "' .. prompt .. '"' .. enter, "n")
   end, 100)
 end, { noremap = true, silent = true, desc = "Nerdprompt in terminal" })
+
+--vim.keymap.set("n", "<leader>gcp, ":w<CR>:call InputCommitAndPush()<CR>",{ noremap = true, silent = true })
+--
+--function! InputCommitAndPush()
+--  let msg = input('Commit message: ')
+--  if !empty(msg)
+--    execute '!git add %'
+--    execute '!git commit -m "' . msg . '" %'
+--    execute '!git push'
+--  endif
+--endfunction
 
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -254,6 +267,13 @@ require("lazy").setup({
           lsp_fallback = true,
         },
       })
+    end,
+  },
+  {
+    "nvim-lualine/lualine.nvim",
+    event = "VeryLazy",
+    opts = function(_, opts)
+      -- Add both the smiley and UFO emoji to lualine_x section
     end,
   },
 })

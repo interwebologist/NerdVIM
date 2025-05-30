@@ -1,4 +1,4 @@
-vim.o.statusline = '%{getcwd()} [%{get(b:, "branch_name", "")}]'
+
 vim.opt.undofile = true
 vim.opt.undodir = "~/.config/nvim/undo"
 vim.opt.clipboard = "unnamedplus" -- Clipboard integration
@@ -11,11 +11,19 @@ vim.o.cursorline = true         -- Highlight the current line
 vim.o.termguicolors = true      -- Enable 24-bit RGB colors
 vim.o.number = true             -- Show line numbers
 vim.g.mapleader = "\\" -- Set space as the leader key
+-- █▓▒░⡷⠂KEY MAPPINGS⠐⢾░▒▓█
+
+-- Normal mode mappings
+vim.keymap.set("n", "<leader>u", "u", { desc = "Undo" })           -- Undo
+vim.keymap.set("n", "<leader>r", "<C-r>", { desc = "Redo" })       -- Redo
+vim.keymap.set("n", "<leader>w", ":w<CR>", { desc = "Write file" })-- Write
+vim.keymap.set("n", "<leader>q", ":q<CR>", { desc = "Quit" })      -- Quit
 vim.keymap.set("n", "<leader>t", function()
       vim.cmd("botright split | resize 10 | terminal")
   end, { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>m", "<C-w>_<Enter>", { noremap = true, silent = true }) -- Maximize current window
 
+-- █▓▒░⡷⠂KEY MAP NerdPrompt Window⠐⢾░▒▓█
 vim.keymap.set("n", "<leader>np", function()
   -- 1. Prompt user for input
   local prompt = vim.fn.input("Prompt for nerdprompt: ")
@@ -35,17 +43,18 @@ vim.keymap.set("n", "<leader>np", function()
   end, 100)
 end, { noremap = true, silent = true, desc = "Nerdprompt in terminal" })
 
---vim.keymap.set("n", "<leader>gcp, ":w<CR>:call InputCommitAndPush()<CR>",{ noremap = true, silent = true })
---
---function! InputCommitAndPush()
---  let msg = input('Commit message: ')
---  if !empty(msg)
---    execute '!git add %'
---    execute '!git commit -m "' . msg . '" %'
---    execute '!git push'
---  endif
---endfunction
+-- █▓▒░⡷⠂KEY MAP Git, Add, Commit, Push⠐⢾░▒▓█
 
+vim.keymap.set("n", "<leader>gcp", function()
+  vim.cmd("write")
+  vim.ui.input({ prompt = "Commit message: " }, function(msg)
+    if msg and msg ~= "" then
+      vim.cmd("!git add %")
+      vim.cmd('!git commit -m "' .. msg .. '" %')
+      vim.cmd("!git push")
+    end
+  end)
+end, { noremap = true, silent = true })
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then

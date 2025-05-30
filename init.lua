@@ -1,4 +1,3 @@
-
 vim.opt.undofile = true
 vim.opt.undodir = "~/.config/nvim/undo"
 vim.opt.clipboard = "unnamedplus" -- Clipboard integration
@@ -11,6 +10,7 @@ vim.o.cursorline = true         -- Highlight the current line
 vim.o.termguicolors = true      -- Enable 24-bit RGB colors
 vim.o.number = true             -- Show line numbers
 vim.g.mapleader = "\\" -- Set space as the leader key
+vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { noremap = true }) -- In Terminal mode easily get back to Normal mode w/ Esc. 
 -- █▓▒░⡷⠂KEY MAPPINGS⠐⢾░▒▓█
 
 -- Normal mode mappings

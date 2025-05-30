@@ -1,6 +1,9 @@
+-- █▓▒░⡷⠂Nvim Config⠐⢾░▒▓█
+-- presistent undo , with undo statefile
 vim.opt.undofile = true
 vim.opt.undodir = "~/.config/nvim/undo"
 vim.opt.clipboard = "unnamedplus" -- Clipboard integration
+--Setup for Python Focus
 vim.o.tabstop = 4               -- Number of spaces a tab counts for
 vim.o.shiftwidth = 4            -- Number of spaces for each indentation
 vim.o.expandtab = true          -- Convert tabs to spaces
@@ -9,18 +12,16 @@ vim.o.wrap = false              -- Disable line wrapping
 vim.o.cursorline = true         -- Highlight the current line
 vim.o.termguicolors = true      -- Enable 24-bit RGB colors
 vim.o.number = true             -- Show line numbers
+-- Leader key setup = \ explicitly
 vim.g.mapleader = "\\" -- Set space as the leader key
-vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { noremap = true }) -- In Terminal mode easily get back to Normal mode w/ Esc. 
 -- █▓▒░⡷⠂KEY MAPPINGS⠐⢾░▒▓█
-
--- Normal mode mappings
-vim.keymap.set("n", "<leader>u", "u", { desc = "Undo" })           -- Undo
-vim.keymap.set("n", "<leader>r", "<C-r>", { desc = "Redo" })       -- Redo
-vim.keymap.set("n", "<leader>w", ":w<CR>", { desc = "Write file" })-- Write
-vim.keymap.set("n", "<leader>q", ":q<CR>", { desc = "Quit" })      -- Quit
+-- ESC in term mode acts exactly as in editor
+vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { noremap = true }) -- In Terminal mode easily get back to Normal mode w/ Esc. 
+-- terminal opens at bottom <leader>t
 vim.keymap.set("n", "<leader>t", function()
       vim.cmd("botright split | resize 10 | terminal")
   end, { noremap = true, silent = true })
+-- Quick maximize window
 vim.keymap.set("n", "<leader>m", "<C-w>_<Enter>", { noremap = true, silent = true }) -- Maximize current window
 
 -- █▓▒░⡷⠂KEY MAP NerdPrompt Window⠐⢾░▒▓█
@@ -55,6 +56,8 @@ vim.keymap.set("n", "<leader>gcp", function()
     end
   end)
 end, { noremap = true, silent = true })
+
+-- █▓▒░⡷⠂LazyVIM & Plugins⠐⢾░▒▓█
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -261,7 +264,6 @@ require("lazy").setup({
       end, {})
     end,
   },
-
   {
     "stevearc/conform.nvim",
     event = { "BufWritePre" },
@@ -278,6 +280,7 @@ require("lazy").setup({
       })
     end,
   },
+  -- Statusline setup 
   {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
@@ -285,4 +288,18 @@ require("lazy").setup({
       -- Add both the smiley and UFO emoji to lualine_x section
     end,
   },
+-- Command cheatsheet <leader>?
+{
+  "bjarneo/lazyvim-cheatsheet.nvim",
+  keys = {
+    {
+      "<leader>?",
+      function()
+        require("lazyvim-cheatsheet").show()
+      end,
+      desc = "Show LazyVim Cheatsheet",
+    },
+  },
+}
+
 })

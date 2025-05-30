@@ -13,7 +13,25 @@ vim.g.mapleader = "\\" -- Set space as the leader key
 vim.keymap.set("n", "<leader>t", function()
       vim.cmd("botright split | resize 10 | terminal")
   end, { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>m", "<C-w>_<CR>", { noremap = true, silent = true }) -- Maximize current window
+vim.keymap.set("n", "<leader>m", "<C-w>_<Enter>", { noremap = true, silent = true }) -- Maximize current window
+vim.keymap.set("n", "<leader>np", function()
+  -- 1. Prompt user for input
+  local prompt = vim.fn.input("Prompt for nerdprompt: ")
+  if prompt == "" then return end
+
+  -- 2. Open a terminal in a horizontal split at the bottom, half screen
+  vim.cmd("botright split | resize " .. math.floor(vim.o.lines / 2) .. " | terminal")
+
+  -- 3. Enter terminal insert mode and send the command
+  -- Wait a moment for terminal to initialize (sometimes needed)
+  vim.defer_fn(function()
+    local enter = vim.api.nvim_replace_termcodes("<CR>", true, true, true)
+    -- Enter insert mode in terminal
+    vim.fn.feedkeys("a", "n")
+    -- Send the nerdprompt command with user input and press Enter
+    vim.fn.feedkeys('nerdprompt "' .. prompt .. '"' .. enter, "n")
+  end, 100)
+end, { noremap = true, silent = true, desc = "Nerdprompt in terminal" })
 
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"

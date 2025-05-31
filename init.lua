@@ -53,14 +53,8 @@ vim.keymap.set("n", "<leader>gcp", function()
             vim.cmd("!git add %")
             vim.cmd('!git commit -m "' .. msg .. '" %')
             vim.cmd("!git push")
-            vim.cmd("botright split | resize 10 | terminal")
-            
-            vim.defer_fn(function()
-                local enter = vim.api.nvim_replace_termcodes("<CR>", true, true, true)
-                vim.fn.feedkeys("a", "n")
-                vim.cmd("!git log -2")
-            end, 1000)
-        end
+            vim.cmd("botright split | resize 10 | terminal git log -2")
+    end
     end)
 end, { noremap = true, silent = true })
 

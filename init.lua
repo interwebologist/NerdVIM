@@ -47,14 +47,21 @@ end, { noremap = true, silent = true, desc = "Nerdprompt in terminal" })
 -- █▓▒░⡷⠂KEY MAP Git, Add, Commit, Push⠐⢾░▒▓█
 
 vim.keymap.set("n", "<leader>gcp", function()
-  vim.cmd("write")
-  vim.ui.input({ prompt = "Commit message: " }, function(msg)
-    if msg and msg ~= "" then
-      vim.cmd("!git add %")
-      vim.cmd('!git commit -m "' .. msg .. '" %')
-      vim.cmd("!git push")
-    end
-  end)
+    vim.cmd("write")
+    vim.ui.input({ prompt = "Commit message: " }, function(msg)
+        if msg and msg ~= "" then
+            vim.cmd("!git add %")
+            vim.cmd('!git commit -m "' .. msg .. '" %')
+            vim.cmd("!git push")
+            vim.cmd("botright split | resize 10 | terminal")
+            
+            vim.defer_fn(function()
+                local enter = vim.api.nvim_replace_termcodes("<CR>", true, true, true)
+                vim.fn.feedkeys("a", "n")
+                vim.cmd("!git log -2")
+            end, 1000)
+        end
+    end)
 end, { noremap = true, silent = true })
 
 -- █▓▒░⡷⠂LazyVIM & Plugins⠐⢾░▒▓█

@@ -124,10 +124,10 @@ require("lazy").setup({
                 support_paste_from_clipboard = false,
             },
             mappings = {
-                ask = "<leader>aa",     -- Ask Avante a question
-                edit = "<leader>ae",    -- Edit the current buffer with Avante.Use in Visual mode to
+                ask = "<leader>aa", -- Ask Avante a question
+                edit = "<leader>ae", -- Edit the current buffer with Avante.Use in Visual mode to
                 refresh = "<leader>ar", -- Refresh the Avante window
-                toggle = "<leader>at",  -- Toggle the Avante window
+                toggle = "<leader>at", -- Toggle the Avante window
             },
         },
         dependencies = {
@@ -143,6 +143,52 @@ require("lazy").setup({
     { "nvim-neo-tree/neo-tree.nvim",     branch = "v3.x" },
     { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
     { "nvimtools/none-ls.nvim" },
+    {
+        -- Mason for LSP,Linters,DAPs,Formatters(think brew for Neovim)
+        "williamboman/mason.nvim",
+        config = function()
+            require("mason").setup({
+                ensure_installed = {
+                    -- Lua
+                    "luacheck",
+                    -- Python
+                    "ruff",
+                    "mypy",
+                    "black",
+                    -- JavaScript/TypeScript
+                    "eslint_d",
+                    -- Shell
+                    "shellcheck",
+                    -- Global
+                    "typos",
+                }
+            })
+        end
+    },
+    -- Linting with nvim-lint
+    {
+        "mfussenegger/nvim-lint",
+        config = function()
+            local lint = require('lint')
+
+            -- Configure linters by filetype
+            lint.linters_by_ft = {
+                python = { 'pylint' }
+            }
+
+            -- Configure pylint to work with virtual environments
+            lint.linters.pylint.cmd = 'python'
+            lint.linters.pylint.args = { '-m', 'pylint', '-f', 'json' }
+
+            -- Auto-lint on save
+            vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+                callback = function()
+                    lint.try_lint()
+                end,
+            })
+        end
+    },
+    -- LSP configuration
     {
         "neovim/nvim-lspconfig",
         dependencies = { 'saghen/blink.cmp' },
@@ -167,39 +213,7 @@ require("lazy").setup({
             }
         end
     },
-
-    --  {
-    --    "hrsh7th/nvim-cmp",
-    --    dependencies = {
-    --      "hrsh7th/cmp-nvim-lsp",
-    --      "saadparwaiz1/cmp_luasnip",
-    --      "hrsh7th/cmp-buffer",
-    --      "hrsh7th/cmp-path",
-    --    },
-    --    config = function()
-    --      local cmp = require("cmp")
-    --      cmp.setup({
-    --        snippet = {
-    --          expand = function(args)
-    --            require("luasnip").lsp_expand(args.body)
-    --          end,
-    --        },
-    --        sources = {
-    --          { name = "nvim_lsp" },
-    --          { name = "luasnip" },
-    --          { name = "buffer" },
-    --          { name = "path" },
-    --          { name = "copilot" },
-    --        },
-    --      })
-    --    end,
-    --  },
-    --  {
-    --    "nvim-telescope/telescope.nvim",
-    --    dependencies = { "nvim-lua/plenary.nvim" },
-    --  },
-
-    -- Linting setup
+    -- linting will add logic and formatting checks outside of LSP
     {
         "mfussenegger/nvim-lint",
         event = { "BufReadPre", "BufNewFile" },
@@ -274,7 +288,7 @@ require("lazy").setup({
     {
         'romgrk/barbar.nvim',
         dependencies = {
-            'lewis6991/gitsigns.nvim',     -- OPTIONAL: for git status
+            'lewis6991/gitsigns.nvim', -- OPTIONAL: for git status
             'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
         },
         init = function() vim.g.barbar_auto_setup = false end,
@@ -313,6 +327,22 @@ require("lazy").setup({
             },
         },
     },
+    -- SuperMavon a replacement for Copilot thats faster and more context aware. test it out later. setup a pro account
+    --   {
+    --  "supermaven-inc/supermaven-nvim",
+    --  event = "InsertEnter",
+    --  cmd = {
+    --    "SupermavenUseFree",
+    --    "SupermavenUsePro",
+    --  },
+    --  opts = {
+    --    keymaps = {
+    --      accept_suggestion = nil, -- handled by nvim-cmp / blink.cmp
+    --    },
+    --    disable_inline_completion = vim.g.ai_cmp,
+    --    ignore_filetypes = { "bigfile", "snacks_input", "snacks_notif" },
+    --  },
+    --},
     -- Blick CMP
     {
         'saghen/blink.cmp',

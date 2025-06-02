@@ -1,5 +1,6 @@
--- █▓▒░⡷⠂Nvim Config⠐⢾░▒▓█
--- presistent undo , with undo statefile
+-- █▓▒░⡷⠂Nvim Config⠐⢾░▒▓█ 
+-- Leader key is set to \ (Default in Neovim)
+-- presistent undo
 vim.opt.undofile = true
 vim.opt.undodir = "~/.config/nvim/undo"
 vim.opt.clipboard = "unnamedplus" -- Clipboard integration
@@ -12,9 +13,12 @@ vim.o.wrap = false              -- Disable line wrapping
 vim.o.cursorline = true         -- Highlight the current line
 vim.o.termguicolors = true      -- Enable 24-bit RGB colors
 vim.o.number = true             -- Show line numbers
--- Leader key setup = \ explicitly
-vim.g.mapleader = "\\" -- Set space as the leader key
+-- disable ghost text in copilot.vim. we routed it to nvim-cmp instead
+vim.g.copilot_no_tab_map = true
+-- vim.api.nvim_set_keymap('i', '<Tab>', '<Tab>', {noremap = true}) 
+vim.g.copilot_enabled = true -- Enable Copilot globally. Choosing to get ghosted suggestions and nvim-cmp separately
 -- █▓▒░⡷⠂KEY MAPPINGS⠐⢾░▒▓█
+-- close and open to enable changes. Check with :verbose map <leader>h , etc
 -- ESC in term mode acts exactly as in editor
 vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { noremap = true }) -- In Terminal mode easily get back to Normal mode w/ Esc. 
 -- terminal opens at bottom <leader>t
@@ -24,14 +28,14 @@ vim.keymap.set("n", "<leader>t", function()
 -- Quick maximize window
 vim.keymap.set("n", "<leader>m", "<C-w>_<Enter>", { noremap = true, silent = true }) -- Maximize current window
 
--- █▓▒░⡷⠂KEY MAP NerdPrompt Window⠐⢾░▒▓█
+-- █▓▒░⡷⠂KEY MAP NerdPrompt Window⠐⢾░▒▓█ 
 vim.keymap.set("n", "<leader>np", function()
   -- 1. Prompt user for input
   local prompt = vim.fn.input("Prompt for nerdprompt: ")
-  if prompt == "" then return end
+  if prompt == "" then return end 
 
   -- 2. Open a terminal in a horizontal split at the bottom, half screen
-  vim.cmd("botright split | resize " .. math.floor(vim.o.lines / 2) .. " | terminal")
+  vim.cmd("botright vsplit | terminal ")
 
   -- 3. Enter terminal insert mode and send the command
   -- Wait a moment for terminal to initialize (sometimes needed)
@@ -74,37 +78,32 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({  
---  {
---      'zbirenbaum/copilot.lua',
---      cmd = 'Copilot',
---      event = 'InsertEnter',
---      config = true,
---   },
---
+    
 {
-    "CopilotC-Nvim/CopilotChat.nvim",
-    dependencies = {
-      { "github/copilot.vim" }, -- or zbirenbaum/copilot.lua
-      { "nvim-lua/plenary.nvim", branch = "master" }, -- for curl, log and async functions
-    },
-    build = "make tiktoken", -- Only on MacOS or Linux
-    opts = {
-      -- See Configuration section for options
-    },
-    -- See Commands section for default commands if you want to lazy load on them
-  },
+  "williamboman/mason.nvim",
+  "williamboman/mason-lspconfig.nvim", 
+  "neovim/nvim-lspconfig",
+  config = function()
+    -- Setup Mason FIRST
+    require("mason").setup()
+    
+    -- Then setup mason-lspconfig
+    require("mason-lspconfig").setup({
+      ensure_installed = { "lua_ls" }, -- Note: use lua_ls, not sumneko_lua
+      automatic_installation = true,
+    })
+    
+    -- Finally setup handlers
+    require("mason-lspconfig").setup_handlers({
+      function(server_name)
+        require("lspconfig")[server_name].setup({})
+      end,
+    })
+  end,
+},
+--  },
   {
-    's1n7ax/nvim-window-picker',
-    name = 'window-picker',
-    event = 'VeryLazy',
-    version = '2.*',
-    config = function()
-      require'window-picker'.setup()
-    end,
-  },
-
-  {
-    "folke/noice.nvim",
+    "folke/noice.nvim", -- this make cmd in center, and popups
     event = "VeryLazy",
     opts = {
       -- add any options here
@@ -130,7 +129,7 @@ require("lazy").setup({
     event = "VeryLazy",
     build = "make",
     keys = {
-    --  { "at", "AvanteToggle", mode = "n", desc = "Toggle Avante" },
+    --  { "<C-a>t", "AvanteToggle", mode = "n", desc = "Toggle Avante" },
     },
     opts = {
       provider = "claude",
@@ -147,12 +146,12 @@ require("lazy").setup({
         auto_apply_diff_after_generation = false,
         support_paste_from_clipboard = false,
       },
---      mappings = {
---        ask = "<leader>aa",
---        edit = "ae",
---        refresh = "ar",
---        toggle = "at",
---      },
+      mappings = {
+        ask = "<leader>aa", -- Ask Avante a question
+        edit = "<leader>ae", -- Edit the current buffer with Avante.Use in Visual mode to 
+        refresh = "<leader>ar", -- Refresh the Avante window
+        toggle = "<leader>at", -- Toggle the Avante window
+      },
     },
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
@@ -165,34 +164,25 @@ require("lazy").setup({
   },
 
   { "nvim-neo-tree/neo-tree.nvim", branch = "v3.x" },
-
   { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
-
   { "nvimtools/none-ls.nvim" },
-
-  {
-    "neovim/nvim-lspconfig",
+  { "neovim/nvim-lspconfig",
     config = function()
       require("lspconfig").pyright.setup {}
       require("lspconfig").bashls.setup {}
+      require("lspconfig").ts_ls.setup {}
+      require("lspconfig").lua_ls.setup {
+        settings = {
+          Lua = {
+            diagnostics = {
+              globals = {'vim'}
+            }
+          }
+        }
+      }
+ 
     end,
   },
-
-  {
-    "L3MON4D3/LuaSnip",
-    dependencies = { "honza/vim-snippets" },
-    config = function()
-      require("luasnip.loaders.from_vscode").lazy_load()
-      -- Optional: Keymaps for snippet navigation
-      vim.keymap.set({"i", "s"}, "<C-j>", function()
-        return require("luasnip").jump(1) or ""
-      end, {expr = true})
-      vim.keymap.set({"i", "s"}, "<C-k>", function()
-        return require("luasnip").jump(-1) or ""
-      end, {expr = true})
-    end,
-  },
-
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
@@ -214,11 +204,11 @@ require("lazy").setup({
           { name = "luasnip" },
           { name = "buffer" },
           { name = "path" },
+          { name = "copilot" },
         },
       })
     end,
   },
-
   {
     "nvim-telescope/telescope.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
@@ -232,9 +222,8 @@ require("lazy").setup({
       local lint = require("lint")
       lint.linters_by_ft = {
         lua = { "luacheck" },
-        -- Add other filetypes and their linters here
-        -- python = { "pylint" },
-        -- javascript = { "eslint" },
+        python = { "pylint" },
+        javascript = { "eslint" },
       }
 
       lint.linters.luacheck = lint.linters.luacheck or {}
@@ -258,13 +247,8 @@ require("lazy").setup({
           require("lint").try_lint()
         end,
       })
-
-      -- Command to manually trigger linting
-      vim.api.nvim_create_user_command("Lint", function()
-        require("lint").try_lint()
-      end, {})
-    end,
-  },
+      end,
+   },
   {
     "stevearc/conform.nvim",
     event = { "BufWritePre" },
@@ -294,7 +278,7 @@ require("lazy").setup({
   "bjarneo/lazyvim-cheatsheet.nvim",
   keys = {
     {
-      "<leader>?",
+      "<leader>h",
       function()
         require("lazyvim-cheatsheet").show()
       end,
@@ -316,5 +300,38 @@ require("lazy").setup({
     },
     version = '^1.0.0', -- optional: only update when a new 1.x version is released
   },
+-- copilot load after deps so keys work
 
+{
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    build = ":Copilot auth",
+    event = "BufReadPost",
+    opts = {
+        suggestion = {
+            enabled = true,
+            auto_trigger = true,
+            hide_during_completion = false,
+            -- Not global keymaps, but local to the plugin, so does show up in :map
+            keymap = {
+                accept = "<leader>y",
+                next = "<leader>j",
+                prev = "<leader>k",
+                dismiss = "<leader>n",
+            },
+        },
+        panel = { enabled = false },
+        filetypes = {
+            markdown = true,
+            help = true,
+        },
+    },
+},
+
+-- Code Companian setup
+
+
+--
 })
+
+

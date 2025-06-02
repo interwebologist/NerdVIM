@@ -1,5 +1,6 @@
 -- █▓▒░⡷⠂Nvim Config⠐⢾░▒▓█ 
--- Leader key is set to \ (Default in Neovim)
+-- Leader key is set to \ (Default in Neovim). Don't use M(alt) or C(ctrl) as 
+-- leader key, as it can cause conflicts with vim/iterm
 -- presistent undo
 vim.opt.undofile = true
 vim.opt.undodir = "~/.config/nvim/undo"
@@ -13,13 +14,10 @@ vim.o.wrap = false              -- Disable line wrapping
 vim.o.cursorline = true         -- Highlight the current line
 vim.o.termguicolors = true      -- Enable 24-bit RGB colors
 vim.o.number = true             -- Show line numbers
--- disable ghost text in copilot.vim. we routed it to nvim-cmp instead
 vim.g.copilot_no_tab_map = true
--- vim.api.nvim_set_keymap('i', '<Tab>', '<Tab>', {noremap = true}) 
-vim.g.copilot_enabled = true -- Enable Copilot globally. Choosing to get ghosted suggestions and nvim-cmp separately
 -- █▓▒░⡷⠂KEY MAPPINGS⠐⢾░▒▓█
 -- close and open to enable changes. Check with :verbose map <leader>h , etc
--- ESC in term mode acts exactly as in editor
+-- ESC in term mode acts exactly as in editor to switch to normal mode
 vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { noremap = true }) -- In Terminal mode easily get back to Normal mode w/ Esc. 
 -- terminal opens at bottom <leader>t
 vim.keymap.set("n", "<leader>t", function()
@@ -79,29 +77,28 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({  
     
-{
-  "williamboman/mason.nvim",
-  "williamboman/mason-lspconfig.nvim", 
-  "neovim/nvim-lspconfig",
-  config = function()
-    -- Setup Mason FIRST
-    require("mason").setup()
-    
-    -- Then setup mason-lspconfig
-    require("mason-lspconfig").setup({
-      ensure_installed = { "lua_ls" }, -- Note: use lua_ls, not sumneko_lua
-      automatic_installation = true,
-    })
-    
-    -- Finally setup handlers
-    require("mason-lspconfig").setup_handlers({
-      function(server_name)
-        require("lspconfig")[server_name].setup({})
-      end,
-    })
-  end,
-},
---  },
+--{
+--  "williamboman/mason.nvim",
+--  "williamboman/mason-lspconfig.nvim", 
+--  "neovim/nvim-lspconfig",
+--  config = function()
+--    -- Setup Mason FIRST
+--    require("mason").setup()
+--    
+--    -- Then setup mason-lspconfig
+--    require("mason-lspconfig").setup({
+--      ensure_installed = { "lua_ls" }, -- Note: use lua_ls, not sumneko_lua
+--      automatic_installation = true,
+--    })
+--    
+--    -- Finally setup handlers
+--    require("mason-lspconfig").setup_handlers({
+--      function(server_name)
+--        require("lspconfig")[server_name].setup({})
+--      end,
+--    })
+--  end,
+--},
   {
     "folke/noice.nvim", -- this make cmd in center, and popups
     event = "VeryLazy",
@@ -183,36 +180,37 @@ require("lazy").setup({
  
     end,
   },
-  {
-    "hrsh7th/nvim-cmp",
-    dependencies = {
-      "hrsh7th/cmp-nvim-lsp",
-      "saadparwaiz1/cmp_luasnip",
-      "hrsh7th/cmp-buffer",
-      "hrsh7th/cmp-path",
-    },
-    config = function()
-      local cmp = require("cmp")
-      cmp.setup({
-        snippet = {
-          expand = function(args)
-            require("luasnip").lsp_expand(args.body)
-          end,
-        },
-        sources = {
-          { name = "nvim_lsp" },
-          { name = "luasnip" },
-          { name = "buffer" },
-          { name = "path" },
-          { name = "copilot" },
-        },
-      })
-    end,
-  },
-  {
-    "nvim-telescope/telescope.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-  },
+
+--  {
+--    "hrsh7th/nvim-cmp",
+--    dependencies = {
+--      "hrsh7th/cmp-nvim-lsp",
+--      "saadparwaiz1/cmp_luasnip",
+--      "hrsh7th/cmp-buffer",
+--      "hrsh7th/cmp-path",
+--    },
+--    config = function()
+--      local cmp = require("cmp")
+--      cmp.setup({
+--        snippet = {
+--          expand = function(args)
+--            require("luasnip").lsp_expand(args.body)
+--          end,
+--        },
+--        sources = {
+--          { name = "nvim_lsp" },
+--          { name = "luasnip" },
+--          { name = "buffer" },
+--          { name = "path" },
+--          { name = "copilot" },
+--        },
+--      })
+--    end,
+--  },
+--  {
+--    "nvim-telescope/telescope.nvim",
+--    dependencies = { "nvim-lua/plenary.nvim" },
+--  },
 
   -- Linting setup
   {
@@ -327,11 +325,48 @@ require("lazy").setup({
         },
     },
 },
+-- Blick CMP
+{
+  'saghen/blink.cmp',
+  dependencies = { 'rafamadriz/friendly-snippets' },
+  version = '1.*',
+  opts = {
+    -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
+    -- 'super-tab' for mappings similar to vscode (tab to accept)
+    -- 'enter' for enter to accept
+    -- 'none' for no mappings
+    --
+    -- All presets have the following mappings:
+    -- C-space: Open menu or open docs if already open
+    -- C-n/C-p or Up/Down: Select next/previous item
+    -- C-e: Hide menu
+    -- C-k: Toggle signature help (if signature.enabled = true)
+    --
+    -- See :h blink-cmp-config-keymap for defining your own keymap
+    keymap = { preset = 'default' },
 
--- Code Companian setup
+    appearance = {
+      -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
+      -- Adjusts spacing to ensure icons are aligned
+      nerd_font_variant = 'mono'
+    },
 
+    -- (Default) Only show the documentation popup when manually triggered
+    completion = { documentation = { auto_show = true } },
 
---
+    -- Default list of enabled providers defined so that you can extend it
+    -- elsewhere in your config, without redefining it, due to `opts_extend`
+    sources = {
+      default = { 'lsp', 'path', 'snippets', 'buffer'},
+    },
+
+    -- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
+    -- You may use a lua implementation instead by using `implementation = "lua"` or fallback to the lua implementation,
+    -- when the Rust fuzzy matcher is not available, by using `implementation = "prefer_rust"`
+    --
+    -- See the fuzzy documentation for more information
+    fuzzy = { implementation = "prefer_rust_with_warning" }
+  },
+  opts_extend = { "sources.default" } 
+},
 })
-
-

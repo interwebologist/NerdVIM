@@ -63,6 +63,15 @@ vim.keymap.set("n", "<leader>gcp", function()
         end)
 end, { noremap = true, silent = true })
 
+-- █▓▒░⡷⠂Autogroups⠐⢾░▒▓█
+-- when over squggly, show diagnostics
+vim.o.updatetime = 250 -- Set a short delay for CursorHold
+vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+        callback = function()
+                vim.diagnostic.open_float(nil, { focus = false })
+        end,
+})
+
 -- █▓▒░⡷⠂LazyVIM & Plugins⠐⢾░▒▓█
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"

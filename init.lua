@@ -68,7 +68,7 @@ end, { noremap = true, silent = true })
 -- █▓▒░⡷⠂Autogroups⠐⢾░▒▓█
 -- when over squggly, show diagnostics
 vim.o.updatetime = 250 -- Set a short delay for CursorHold
-vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+vim.api.nvim_create_autocmd({ "CursorHold" }, {
         callback = function()
                 vim.diagnostic.open_float(nil, {
                         -- focus = false

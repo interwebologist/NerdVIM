@@ -1,6 +1,7 @@
 -- █▓▒░⡷⠂Nvim Config⠐⢾░▒▓█
 -- Leader key is set to \ (Default in Neovim). Don't use M(alt) or C(ctrl)
 -- it can cause conflicts with vim/iterm
+
 -- presistent undo
 vim.opt.undofile = true
 vim.opt.undodir = "~/.config/nvim/undo"
@@ -16,9 +17,10 @@ vim.o.cursorline = true           -- Highlight the current line
 vim.o.termguicolors = true        -- Enable 24-bit RGB colors
 vim.o.number = true               -- Show line numbers
 vim.hlsearch = true               -- Highlight search results
--- vim.g.copilot_no_tab_map = true
+
 -- █▓▒░⡷⠂KEY MAPPINGS⠐⢾░▒▓█
--- close and open to enable changes. Check with :verbose map <leader>h , etc
+-- close and open to enable changes
+
 -- ESC in term mode acts exactly as in editor to switch to normal mode
 vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { noremap = true }) -- In Terminal mode easily get back to Normal mode w/ Esc.
 -- terminal opens at bottom <leader>t
@@ -68,7 +70,11 @@ end, { noremap = true, silent = true })
 vim.o.updatetime = 250 -- Set a short delay for CursorHold
 vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
         callback = function()
-                vim.diagnostic.open_float(nil, { focus = false })
+                vim.diagnostic.open_float(nil, {
+                        -- focus = false
+                        focusable = false,
+                        close_events = { "CursorMoved", "CursorMovedI", "BufLeave", "InsertEnter" }
+                })
         end,
 })
 

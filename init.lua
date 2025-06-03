@@ -1,6 +1,6 @@
 -- █▓▒░⡷⠂Nvim Config⠐⢾░▒▓█
--- Leader key is set to \ (Default in Neovim). Don't use M(alt) or C(ctrl) as
--- leader key, as it can cause conflicts with vim/iterm
+-- Leader key is set to \ (Default in Neovim). Don't use M(alt) or C(ctrl)
+-- it can cause conflicts with vim/iterm
 -- presistent undo
 vim.opt.undofile = true
 vim.opt.undodir = "~/.config/nvim/undo"

@@ -68,14 +68,14 @@ vim.keymap.set("n", "<leader>gcp", function()
 end, { noremap = true, silent = true })
 
 -- █▓▒░⡷⠂Autogroups⠐⢾░▒▓█
--- when over squggly, show diagnostics
+-- when over squggly, show diagnostics. Insert or single horizontal move removes diagnostics
 vim.o.updatetime = 250 -- Set a short delay for CursorHold
 vim.api.nvim_create_autocmd({ "CursorHold" }, {
     callback = function()
         vim.diagnostic.open_float(nil, {
             -- focus = false
             focusable = false,
-            close_events = { "CursorMoved", "CursorMovedI", "BufLeave", "InsertEnter" }
+            close_events = { "CursorMoved", "CursorMovedI", "BufLeave", "InsertEnter", "CursorMoved" }
         })
     end,
 })
@@ -119,44 +119,44 @@ require("lazy").setup({
         end,
     },
 
---    {
---        "yetone/avante.nvim",
---        event = "VeryLazy",
---        build = "make",
---        keys = {
---            --  { "<C-a>t", "AvanteToggle", mode = "n", desc = "Toggle Avante" },
---        },
---        opts = {
---            provider = "claude",
---            claude = {
---                endpoint = "https://api.anthropic.com",
---                model = "claude-3-5-sonnet-20241022",
---                temperature = 0,
---                max_tokens = 4096,
---            },
---            behaviour = {
---                auto_suggestions = false,
---                auto_set_highlight_group = true,
---                auto_set_keymaps = false, -- prevent conflict
---                auto_apply_diff_after_generation = false,
---                support_paste_from_clipboard = false,
---            },
---            mappings = {
---                ask = "<leader>aa",     -- Ask Avante a question
---                edit = "<leader>ae",    -- Edit the current buffer with Avante.Use in Visual mode to
---                refresh = "<leader>ar", -- Refresh the Avante window
---                toggle = "<leader>at",  -- Toggle the Avante window
---            },
---        },
-        dependencies = {
-            "nvim-treesitter/nvim-treesitter",
-            "stevearc/dressing.nvim",
-            "nvim-lua/plenary.nvim",
-            "MunifTanjim/nui.nvim",
-            "nvim-tree/nvim-web-devicons",
-            "zbirenbaum/copilot.lua",
-        },
-    },
+    --    {
+    --        "yetone/avante.nvim",
+    --        event = "VeryLazy",
+    --        build = "make",
+    --        keys = {
+    --            --  { "<C-a>t", "AvanteToggle", mode = "n", desc = "Toggle Avante" },
+    --        },
+    --        opts = {
+    --            provider = "claude",
+    --            claude = {
+    --                endpoint = "https://api.anthropic.com",
+    --                model = "claude-3-5-sonnet-20241022",
+    --                temperature = 0,
+    --                max_tokens = 4096,
+    --            },
+    --            behaviour = {
+    --                auto_suggestions = false,
+    --                auto_set_highlight_group = true,
+    --                auto_set_keymaps = false, -- prevent conflict
+    --                auto_apply_diff_after_generation = false,
+    --                support_paste_from_clipboard = false,
+    --            },
+    --            mappings = {
+    --                ask = "<leader>aa",     -- Ask Avante a question
+    --                edit = "<leader>ae",    -- Edit the current buffer with Avante.Use in Visual mode to
+    --                refresh = "<leader>ar", -- Refresh the Avante window
+    --                toggle = "<leader>at",  -- Toggle the Avante window
+    --            },
+    --        },
+    --        dependencies = {
+    --            "nvim-treesitter/nvim-treesitter",
+    --            "stevearc/dressing.nvim",
+    --            "nvim-lua/plenary.nvim",
+    --            "MunifTanjim/nui.nvim",
+    --            "nvim-tree/nvim-web-devicons",
+    --            "zbirenbaum/copilot.lua",
+    --        },
+    --    },
 
     { "nvim-neo-tree/neo-tree.nvim",     branch = "v3.x" },
     { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },

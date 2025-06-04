@@ -97,14 +97,16 @@ require("lazy").setup({
         config = function()
             local pulse = require("pulse")
             pulse.setup()
+            local microbreak_interval = 1
+            local restbreak_interval = 60
             pulse.add("microbreak", {
-                interval = 10,
-                message = "{interval} Take a microbreak! Stretch hands/arms, look away",
+                interval = microbreak_interval,
+                message = string.format("%d minute microbreak! Stretch hands, arms & look away", microbreak_interval),
                 enabled = enable_timers, -- Controlled by the boolean
             })
             pulse.add("restbreak", {
-                interval = 60,
-                message = "{interval} mins, Take a long break 5-10mins",
+                interval = restbreak_interval,
+                message = string.format("%d minute long break! 5-10mins", restbreak_interval),
                 enabled = enable_timers, -- Controlled by the boolean
             })
         end,

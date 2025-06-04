@@ -1,0 +1,60 @@
+# Personal Neovim Cheatsheet
+
+## Supermaven @supermaven
+----------------------------------------
+Trigger  Completion | <leader>sm
+Accept  Suggestion | <Tab>
+Reject  Suggestion | <C-]>
+Show  Docs | <leader>smd
+
+## CodeCompanion @codecompanion @ai
+----------------------------------------
+Open CodeCompanion Panel | <leader>cc
+Accept CodeCompanion Suggestion | <leader>ca
+Reject CodeCompanion Suggestion | <leader>cr
+Toggle CodeCompanion | <leader>ct
+Show CodeCompanion Docs | <leader>cd
+
+## blink.cmp @blink @cmp
+----------------------------------------
+Trigger Completion Menu | <C-Space>
+Accept Completion | <CR>
+Abort Completion | <C-e>
+Scroll Docs Up | <C-u>
+Scroll Docs Down | <C-d>
+Select Next Item | <C-n>
+Select Previous Item | <C-p>
+
+## Vim Motions @motions @movement
+----------------------------------------
+Move to Start of Line | 0
+Move to End of Line | $
+Move Forward by Word | w
+Move Backward by Word | b
+Move to Top of Screen | H
+Move to Middle of Screen | M
+Move to Bottom of Screen | L
+
+## Window Motions (Ctrl-w) @window @split
+----------------------------------------
+Switch to Next Window | <C-w>w
+Switch to Previous Window | <C-w>W
+Split Window Horizontally | <C-w>s
+Split Window Vertically | <C-w>v
+Close Current Window | <C-w>c
+Close Other Windows | <C-w>o
+Move Window Left | <C-w>h
+Move Window Down | <C-w>j
+Move Window Up | <C-w>k
+Move Window Right | <C-w>l
+Resize Window Left | <C-w><
+Resize Window Right | <C-w>>
+Resize Window Up | <C-w>+
+Resize Window Down | <C-w>-
+
+## pylint @pylint @lint
+----------------------------------------
+Run Pylint on Current File | :!pylint %
+Show Pylint Quickfix List | :copen
+Next Pylint Error | :cnext
+Previous Pylint Error | :cprev

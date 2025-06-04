@@ -36,6 +36,9 @@ This README describes the main plugins and features included in your Neovim setu
   **Note:** NerdPrompt must be installed separately.
 
 ## Key Features & Custom Mappings
+ --**Mini and Rest Break Timers**
+  Bookmark your break times and get reminders to take a microbreak and a restbreak. Disable the timers in the config file.
+  at the top of init.lua if not needed
 
 - **Persistent Undo**  
   Undo history is saved across sessions for better workflow continuity.

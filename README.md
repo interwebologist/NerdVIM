@@ -2,10 +2,10 @@
 
 ### Neovim Configuration
 UI shots:
-![NerdVIM UI Screenshot](images/UI.png)
-![NerdVIM UI Screenshot](images/UI2.png)
 ![NerdVIM UI Screenshot](images/UI4.png)
 ![NerdVIM UI Screenshot](images/UI3.png)
+![NerdVIM UI Screenshot](images/UI.png)
+
 NerdVIM with CodeCompanion running Anthropic Claude 3.7 paid model.
 Picks up Env var for API key automatically. 
 ![NerdVIM AI Prompt Example](images/codecompanion.png)

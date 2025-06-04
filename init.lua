@@ -2,6 +2,11 @@
 -- Leader key is set to \ (Default in Neovim). Don't use M(alt) or C(ctrl)
 -- it can cause conflicts with vim/iterm
 
+-- █▓▒░⡷⠂Break Timers⠐⢾░▒▓█
+-- Define a boolean to control timer activation for 10 min mini break and 60 min break reminders
+-- See :h pulse.nvim for documentation for using break timers
+local enable_timers = true -- Set to false to disable all timers
+
 -- presistent undo
 vim.opt.undofile = true
 vim.opt.undodir = "~/.config/nvim/undo"
@@ -86,6 +91,24 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
 
+    {
+        "linguini1/pulse.nvim",
+        version = "*",
+        config = function()
+            local pulse = require("pulse")
+            pulse.setup()
+            pulse.add("microbreak", {
+                interval = 10,
+                message = "{interval} Take a microbreak! Stretch hands/arms, look away",
+                enabled = enable_timers, -- Controlled by the boolean
+            })
+            pulse.add("restbreak", {
+                interval = 60,
+                message = "{interval} mins, Take a long break 5-10mins",
+                enabled = enable_timers, -- Controlled by the boolean
+            })
+        end,
+    },
     { -- diagnostics at the top of the window
         'dgagn/diagflow.nvim',
         config = function()

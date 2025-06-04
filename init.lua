@@ -68,18 +68,7 @@ vim.keymap.set("n", "<leader>gcp", function()
 end, { noremap = true, silent = true })
 
 -- █▓▒░⡷⠂Autogroups⠐⢾░▒▓█
--- when over squggly, show diagnostics. Insert or single horizontal move removes diagnostics
-vim.o.updatetime = 250 -- Set a short delay for CursorHold
-vim.api.nvim_create_autocmd({ "CursorHold" }, {
-    callback = function()
-        vim.diagnostic.open_float(nil, {
-            -- focus = false
-            focusable = false,
-            close_events = { "CursorMoved", "CursorMovedI", "BufLeave", "InsertEnter", "CursorMoved" }
-        })
-    end,
-})
-
+-- Autogroups HERE
 -- █▓▒░⡷⠂LazyVIM & Plugins⠐⢾░▒▓█
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -96,6 +85,18 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
+
+    { -- diagnostics at the top of the window
+        'dgagn/diagflow.nvim',
+        config = function()
+            require('diagflow').setup({
+                enable = true,
+                placement = 'top',    -- Top of the window
+                text_align = 'right', -- Right-aligned
+                -- You can add more options as above
+            })
+        end
+    },
 
     {
         "folke/noice.nvim", -- this make cmd in center, and popups

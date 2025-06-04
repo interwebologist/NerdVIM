@@ -119,35 +119,35 @@ require("lazy").setup({
         end,
     },
 
-    {
-        "yetone/avante.nvim",
-        event = "VeryLazy",
-        build = "make",
-        keys = {
-            --  { "<C-a>t", "AvanteToggle", mode = "n", desc = "Toggle Avante" },
-        },
-        opts = {
-            provider = "claude",
-            claude = {
-                endpoint = "https://api.anthropic.com",
-                model = "claude-3-5-sonnet-20241022",
-                temperature = 0,
-                max_tokens = 4096,
-            },
-            behaviour = {
-                auto_suggestions = false,
-                auto_set_highlight_group = true,
-                auto_set_keymaps = false, -- prevent conflict
-                auto_apply_diff_after_generation = false,
-                support_paste_from_clipboard = false,
-            },
-            mappings = {
-                ask = "<leader>aa",     -- Ask Avante a question
-                edit = "<leader>ae",    -- Edit the current buffer with Avante.Use in Visual mode to
-                refresh = "<leader>ar", -- Refresh the Avante window
-                toggle = "<leader>at",  -- Toggle the Avante window
-            },
-        },
+--    {
+--        "yetone/avante.nvim",
+--        event = "VeryLazy",
+--        build = "make",
+--        keys = {
+--            --  { "<C-a>t", "AvanteToggle", mode = "n", desc = "Toggle Avante" },
+--        },
+--        opts = {
+--            provider = "claude",
+--            claude = {
+--                endpoint = "https://api.anthropic.com",
+--                model = "claude-3-5-sonnet-20241022",
+--                temperature = 0,
+--                max_tokens = 4096,
+--            },
+--            behaviour = {
+--                auto_suggestions = false,
+--                auto_set_highlight_group = true,
+--                auto_set_keymaps = false, -- prevent conflict
+--                auto_apply_diff_after_generation = false,
+--                support_paste_from_clipboard = false,
+--            },
+--            mappings = {
+--                ask = "<leader>aa",     -- Ask Avante a question
+--                edit = "<leader>ae",    -- Edit the current buffer with Avante.Use in Visual mode to
+--                refresh = "<leader>ar", -- Refresh the Avante window
+--                toggle = "<leader>at",  -- Toggle the Avante window
+--            },
+--        },
         dependencies = {
             "nvim-treesitter/nvim-treesitter",
             "stevearc/dressing.nvim",
@@ -219,7 +219,8 @@ require("lazy").setup({
             --    config = function()
             require("lspconfig").pyright.setup {}
             require("lspconfig").bashls.setup {}
-            require("lspconfig").ts_ls.setup {}
+            -- Javascript/Typescript
+            require("lspconfig").tssserver.setup {}
             require("lspconfig").lua_ls.setup {
                 settings = {
                     Lua = {
@@ -290,7 +291,7 @@ require("lazy").setup({
             -- Add both the smiley and UFO emoji to lualine_x section
         end,
     },
-    -- Command cheatsheet <leader>?
+    -- Command cheatsheet <leader>? . Edit chectsheet.txt in nvim config file with custom commands you want to see in cheatsheet
     {
         "sudormrfbin/cheatsheet.nvim",
         dependencies = {
@@ -324,7 +325,7 @@ require("lazy").setup({
         },
         version = '^1.0.0', -- optional: only update when a new 1.x version is released
     },
-    -- copilot load after deps so keys work
+    -- copilot load after deps so keys work. remove due to being slow and not that useful. replace with supermaven.
 
     --    {
     --        "zbirenbaum/copilot.lua",

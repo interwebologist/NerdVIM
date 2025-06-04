@@ -6,6 +6,8 @@
 -- Define a boolean to control timer activation for 10 min mini break and 60 min break reminders
 -- See :h pulse.nvim for documentation for using break timers
 local enable_timers = true -- Set to false to disable all timers
+local microbreak_interval = 10
+local restbreak_interval = 60
 
 -- presistent undo
 vim.opt.undofile = true
@@ -97,8 +99,6 @@ require("lazy").setup({
         config = function()
             local pulse = require("pulse")
             pulse.setup()
-            local microbreak_interval = 1
-            local restbreak_interval = 60
             pulse.add("microbreak", {
                 interval = microbreak_interval,
                 message = string.format("%d minute microbreak! Stretch hands, arms & look away", microbreak_interval),

@@ -17,7 +17,7 @@ This README describes the main plugins and features included in your Neovim setu
 
 - **supermaven-nvim**  
   AI-powered code completion, providing context-aware suggestions as you type.I find this much faster with better 
-  suggestions than github
+  suggestions than github copilot.
 
 - **codecompanion.nvim**  
   Integrates with external AI models (e.g., Anthropic Claude) for code chat and inline assistance directly in Neovim.

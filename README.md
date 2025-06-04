@@ -1,6 +1,6 @@
 # NerdVIM
 
-##:# Neovim Configuration
+### Neovim Configuration
 UI shots:
 ![NerdVIM UI Screenshot](images/UI.png)
 ![NerdVIM UI Screenshot](images/UI2.png)

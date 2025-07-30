@@ -5,7 +5,7 @@
 -- █▓▒░⡷⠂Break Timers⠐⢾░▒▓█
 -- Define a boolean to control timer activation for 10 min mini break and 60 min break reminders
 -- See :h pulse.nvim for documentation for using break timers
-local enable_timers = true -- Set to false to disable all timers
+local enable_timers = false -- Set to false to disable all micro break and break timers.
 local microbreak_interval = 10
 local restbreak_interval = 60
 
@@ -38,7 +38,6 @@ vim.keymap.set("n", "<leader>t", function()
 end, { noremap = true, silent = true })
 -- Quick maximize window
 vim.keymap.set("n", "<leader>m", "<C-w>_<Enter>", { noremap = true, silent = true }) -- Maximize current window
-
 
 -- █▓▒░⡷⠂KEY MAP NerdPrompt Window⠐⢾░▒▓█
 vim.keymap.set("n", "<leader>np", function()
@@ -177,7 +176,8 @@ require("lazy").setup({
 
             -- Configure linters by filetype
             lint.linters_by_ft = {
-                python = { 'pylint' }
+                python = { 'pylint' },
+                yaml = { 'yamllint' }
             }
 
             -- Configure pylint to work with virtual environments

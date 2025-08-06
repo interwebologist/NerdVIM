@@ -438,6 +438,13 @@ require("lazy").setup({
                 }
             })
         end,
+    },
+    {
+        "junegunn/fzf",
+        build = "./install --bin",
+    },
+    {
+        "junegunn/fzf.vim",
     }
 
 })

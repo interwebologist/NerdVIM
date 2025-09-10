@@ -30,6 +30,9 @@ vim.hlsearch = true               -- Highlight search results
 -- █▓▒░⡷⠂KEY MAPPINGS⠐⢾░▒▓█
 -- close and open to enable changes
 
+-- Diagnostic keybinding
+vim.keymap.set('n', '<leader>do', vim.diagnostic.open_float, { desc = 'Open diagnostic float' })
+
 -- ESC in term mode acts exactly as in editor to switch to normal mode
 vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { noremap = true }) -- In Terminal mode easily get back to Normal mode w/ Esc.
 -- terminal opens at bottom <leader>t
@@ -168,30 +171,6 @@ require("lazy").setup({
             })
         end
     },
-    -- Linting with nvim-lint
-    {
-        "mfussenegger/nvim-lint",
-        config = function()
-            local lint = require('lint')
-
-            -- Configure linters by filetype
-            lint.linters_by_ft = {
-                python = { 'pylint' },
-                yaml = { 'yamllint' }
-            }
-
-            -- Configure pylint to work with virtual environments
-            lint.linters.pylint.cmd = 'python'
-            lint.linters.pylint.args = { '-m', 'pylint', '-f', 'json' }
-
-            -- Auto-lint on save
-            vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-                callback = function()
-                    lint.try_lint()
-                end,
-            })
-        end
-    },
     -- LSP configuration
     {
         "neovim/nvim-lspconfig",
@@ -311,33 +290,6 @@ require("lazy").setup({
         },
         version = '^1.0.0', -- optional: only update when a new 1.x version is released
     },
-    -- copilot load after deps so keys work. remove due to being slow and not that useful. replace with supermaven.
-
-    --    {
-    --        "zbirenbaum/copilot.lua",
-    --        cmd = "Copilot",
-    --        build = ":Copilot auth",
-    --        event = "BufReadPost",
-    --        opts = {
-    --            suggestion = {
-    --                enabled = true,
-    --                auto_trigger = true,
-    --                hide_during_completion = false,
-    --                -- Not global keymaps, but local to the plugin, so does show up in :map
-    --                keymap = {
-    --                    accept = "<leader>y",
-    --                    next = "<leader>j",
-    --                    prev = "<leader>k",
-    --                    dismiss = "<leader>n",
-    --                },
-    --            },
-    --            panel = { enabled = false },
-    --            filetypes = {
-    --                markdown = true,
-    --                help = true,
-    --            },
-    --        },
-    --    },
     -- SuperMavon a replacement for Copilot thats faster and more context aware. test it out later. running w/ pro account
     {
         "supermaven-inc/supermaven-nvim",
@@ -445,6 +397,19 @@ require("lazy").setup({
     },
     {
         "junegunn/fzf.vim",
+    },
+    -- Claude Code integration
+    {
+        "coder/claudecode.nvim",
+        dependencies = { "folke/snacks.nvim" },
+        config = true,
+        keys = {
+            { "<leader>c",  nil,                             desc = "Claude Code" },
+            { "<leader>ct", "<cmd>ClaudeCode<cr>",           desc = "Toggle Claude Code" },
+            { "<leader>cs", "<cmd>ClaudeCodeSend<cr>",       mode = "v",                 desc = "Send selection to Claude" },
+            { "<leader>ca", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "Accept Claude diff" },
+            { "<leader>cr", "<cmd>ClaudeCodeDiffDeny<cr>",   desc = "Reject Claude diff" },
+        },
     }
 
 })

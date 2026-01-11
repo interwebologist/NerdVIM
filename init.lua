@@ -1,6 +1,13 @@
 -- █▓▒░⡷⠂Nvim Config⠐⢾░▒▓█
--- Leader key is set to \ (Default in Neovim). Don't use M(alt) or C(ctrl)
--- it can cause conflicts with vim/iterm
+-- ╔═══════════════════════════════════════════════════════════════════╗
+-- ║ LEADER KEY: \ (backslash) - Default in Neovim                   ║
+-- ║ NOTE: Don't use M(alt) or C(ctrl) as leader - conflicts with    ║
+-- ║ vim/iTerm. The leader key is NOT explicitly set in this config   ║
+-- ║ because we use Neovim's default backslash (\) leader.            ║
+-- ╚═══════════════════════════════════════════════════════════════════╝
+
+-- Add VectorCode CLI to PATH
+vim.env.PATH = vim.env.HOME .. "/.local/bin:" .. vim.env.PATH
 
 -- █▓▒░⡷⠂Break Timers⠐⢾░▒▓█
 -- Define a boolean to control timer activation for 10 min mini break and 60 min break reminders
@@ -184,8 +191,8 @@ require("lazy").setup({
             --    config = function()
             require("lspconfig").pyright.setup {}
             require("lspconfig").bashls.setup {}
-            -- Javascript/Typescript
-            require("lspconfig").tssserver.setup {}
+            -- Javascript/Typescript (ts_ls is the new name for tsserver)
+            require("lspconfig").ts_ls.setup {}
             require("lspconfig").lua_ls.setup {
                 settings = {
                     Lua = {
@@ -290,31 +297,10 @@ require("lazy").setup({
         },
         version = '^1.0.0', -- optional: only update when a new 1.x version is released
     },
-    -- SuperMavon a replacement for Copilot thats faster and more context aware. test it out later. running w/ pro account
-    {
-        "supermaven-inc/supermaven-nvim",
-        keymaps = {
-            accept_suggestion = "<Tab>", -- handled by nvim-cmp / blink.cmp:
-            clear_suggestion = "<C-]>",
-            accept_word = "<C-j>",
-        },
-        event = "InsertEnter",
-        cmd = {
-            "SupermavenUseFree",
-            "SupermavenUsePro",
-        },
-        opts = {
-            keymaps = {
-                accept_suggestion = nil, -- handled by nvim-cmp / blink.cmp
-            },
-            disable_inline_completion = vim.g.ai_cmp,
-            ignore_filetypes = { "bigfile", "snacks_input", "snacks_notif" },
-        },
-    },
-    -- Blick CMP
+    -- Blink CMP
     {
         'saghen/blink.cmp',
-        dependencies = { 'rafamadriz/friendly-snippets' },
+        dependencies = { 'rafamadriz/friendly-snippets', 'milanglacier/minuet-ai.nvim' },
         version = '1.*',
         opts = {
             -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
@@ -329,7 +315,10 @@ require("lazy").setup({
             -- C-k: Toggle signature help (if signature.enabled = true)
             --
             -- See :h blink-cmp-config-keymap for defining your own keymap
-            keymap = { preset = 'default' },
+            keymap = {
+                preset = 'default',
+                ['<A-y>'] = function(cmp) require('minuet').make_blink_map()(cmp) end,
+            },
 
             appearance = {
                 -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
@@ -338,12 +327,24 @@ require("lazy").setup({
             },
 
             -- (Default) Only show the documentation popup when manually triggered
-            completion = { documentation = { auto_show = true } },
+            completion = {
+                documentation = { auto_show = true },
+                trigger = { prefetch_on_insert = false },
+            },
 
             -- Default list of enabled providers defined so that you can extend it
             -- elsewhere in your config, without redefining it, due to `opts_extend`
             sources = {
-                default = { 'lsp', 'path', 'snippets', 'buffer' },
+                default = { 'lsp', 'path', 'snippets', 'buffer', 'minuet' },
+                providers = {
+                    minuet = {
+                        name = 'minuet',
+                        module = 'minuet.blink',
+                        async = true,
+                        timeout_ms = 3000,
+                        score_offset = 50,
+                    },
+                },
             },
 
             -- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
@@ -410,6 +411,71 @@ require("lazy").setup({
             { "<leader>ca", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "Accept Claude diff" },
             { "<leader>cr", "<cmd>ClaudeCodeDiffDeny<cr>",   desc = "Reject Claude diff" },
         },
-    }
+    },
+    -- VectorCode for semantic RAG code search
+    {
+        "Davidyz/VectorCode",
+        dependencies = { "nvim-lua/plenary.nvim" },
+        config = function()
+            require("vectorcode").setup {
+                n_query = 1,
+            }
+        end,
+    },
+    -- Minuet AI completion with VectorCode integration
+    {
+        "milanglacier/minuet-ai.nvim",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "Davidyz/VectorCode",
+        },
+        config = function()
+            local has_vc, vectorcode_config = pcall(require, "vectorcode.config")
+            local vectorcode_cacher = nil
+            if has_vc then
+                vectorcode_cacher = vectorcode_config.get_cacher_backend()
+            end
 
+            local RAG_Context_Window_Size = 8000
+
+            local provider_options = {
+                openai_fim_compatible = {
+                    model = "qwen2.5-coder:7b-instruct-q5_K_M",
+                    template = {
+                        prompt = function(pref, suff, _)
+                            local prompt_message = ""
+                            if has_vc then
+                                for _, file in ipairs(vectorcode_cacher.query_from_cache(0)) do
+                                    prompt_message = prompt_message
+                                        .. "<|file_sep|>"
+                                        .. file.path
+                                        .. "\n"
+                                        .. file.document
+                                end
+                            end
+
+                            prompt_message = vim.fn.strcharpart(
+                                prompt_message,
+                                0,
+                                RAG_Context_Window_Size
+                            )
+
+                            return prompt_message
+                                .. "<|fim_prefix|>"
+                                .. pref
+                                .. "<|fim_suffix|>"
+                                .. suff
+                                .. "<|fim_middle|>"
+                        end,
+                        suffix = false,
+                    },
+                },
+            }
+
+            require("minuet").setup {
+                provider = "openai_fim_compatible",
+                provider_options = provider_options,
+            }
+        end,
+    },
 })

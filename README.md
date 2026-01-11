@@ -22,20 +22,83 @@ This README describes the main plugins and features included in your Neovim setu
 
 ## Main Plugins
 
-### AI & Code Assistance 
+### AI & Code Assistance
 
-- **supermaven-nvim**  
-  AI-powered code completion, providing context-aware suggestions as you type.I find this much faster with better 
-  suggestions than github copilot.
+- **minuet-ai.nvim**
+  RAG-powered AI code completion using local Ollama models. Provides semantic code completions with full codebase context awareness through VectorCode integration.
 
-- **codecompanion.nvim**  
+- **VectorCode**
+  Semantic code indexing and RAG (Retrieval-Augmented Generation) system using `nomic-embed-text` embeddings via Ollama. Automatically indexes your codebase and retrieves relevant snippets for AI completions.
+
+- **codecompanion.nvim**
   Integrates with external AI models (e.g., Anthropic Claude) for code chat and inline assistance directly in Neovim.
 
-- **NerdPrompt**  
-  `<leader>np` is mapped to trigger Perplexity.AI via [NerdPrompt](https://github.com/interwebologist/NerdPrompt/tree/main), enabling you to interact with Perplexity.AI from within Neovim.  
+- **claudecode.nvim**
+  Native Claude Code integration via WebSocket providing real-time context tracking, diff support, and seamless Claude Code CLI integration.
+
+- **NerdPrompt**
+  `<leader>np` is mapped to trigger Perplexity.AI via [NerdPrompt](https://github.com/interwebologist/NerdPrompt/tree/main), enabling you to interact with Perplexity.AI from within Neovim.
   **Note:** NerdPrompt must be installed separately.
 
+#### How It Works
+
+**Semantic RAG Flow:**
+1. VectorCode continuously indexes your codebase using `nomic-embed-text` embeddings
+2. When you type, VectorCode retrieves the 3 most semantically relevant code snippets
+3. Minuet sends these snippets + your current context to Ollama's `qwen2.5-coder` model
+4. The FIM model generates completions aware of your entire codebase
+5. Completions appear in blink.cmp alongside LSP suggestions
+
+**Usage**
+
+Normal Workflow:
+- Just start typing - minuet completions appear automatically in the completion menu
+- Press `<C-y>` to accept (standard blink.cmp)
+- Press `<A-y>` to manually trigger minuet completions
+
+VectorCode Commands:
+- `:VectorCode register` - Manually register current buffer (auto-enabled)
+- `:VectorCode deregister` - Stop RAG for current buffer
+- `:VectorCode vectorise` - Index entire project
+- `:VectorCode query <text>` - Search semantic context
+
+**Per-Project Setup**
+
+When you cd into a new codebase:
+1. VectorCode will create a `.vectorcode/` directory in that project
+2. Buffers auto-register on file open
+3. Each project maintains its own semantic index
+4. RAG context is project-specific
+
+**Testing**
+
+To test the setup:
+1. Reload Neovim (restart nvim or `:Lazy sync`)
+2. Open a Python/Lua/JS file in any project
+3. Start typing a function - you should see completions with RAG context
+4. Check `:messages` for VectorCode registration notifications
+
+**Troubleshooting**
+
+If completions aren't working:
+- Ensure Ollama is running: `ollama list`
+- Check VectorCode: `vectorcode version` (should be 0.7.20)
+- Verify registration: Look for VectorCode notifications when opening files
+- Check logs: `:messages` for errors
+
 ## Key Features & Custom Mappings
+
+### Leader Key
+**The leader key is `\` (backslash)** - Neovim's default. All `<leader>` keybindings use backslash.
+
+**Usage:** Press `\` followed by the key combo (e.g., `\t` for terminal, `\cc` for CodeCompanion)
+
+### AI Completion - Alt-y
+**`Alt-y` (Option-y on Mac)**: Manually trigger Minuet AI completion with RAG context
+- Queries your codebase semantically via VectorCode
+- Sends relevant code snippets to Ollama's `qwen2.5-coder` model
+- Generates context-aware completions using FIM (Fill-In-Middle)
+
 - **Mini and Rest Break Timers**
   Get reminders to take a microbreak and a restbreak. Disable the timers in the config file at the top of init.lua if not needed
 
@@ -53,6 +116,10 @@ This README describes the main plugins and features included in your Neovim setu
   - `m`: Maximize current window.
   - `np`: Open a "nerdprompt" terminal with user input.
   - `gcp`: Add, commit, and push current file with a prompted git commit message while inside a git repo.
+  - `ct`: Toggle Claude Code terminal.
+  - `cs`: Send visual selection to Claude Code (visual mode).
+  - `ca`: Accept Claude Code diff suggestions.
+  - `cr`: Reject Claude Code diff suggestions.
 
 - **Auto-linting and Formatting**  
   Linting and formatting are triggered automatically on file save and buffer enter.

@@ -22,7 +22,7 @@ This README describes the main plugins and features included in your Neovim setu
 
 ## Main Plugins
 
-### AI Web Search, AI Code Assistance, & AI Fill-in-the-middle Autocompletion w/ Semantic RAG.
+### AI Web Search (Perpelxity.AI), AI Code Assistance (Anthropic), & AI Autocompletion w/ Codebase Semantic RAG (Llama / Qwen2.5-coder:7B-instruct)
 
 - **codecompanion.nvim**
   Integrates with external AI models (e.g., Anthropic Claude) for code chat and inline assistance directly in Neovim.

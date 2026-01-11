@@ -1,0 +1,10 @@
+{
+  "embedding_function": "OllamaEmbeddingFunction",
+  "embedding_params": {
+    "url": "http://127.0.0.1:11434/api/embeddings",
+    "model_name": "nomic-embed-text"
+  },
+  "n_query": 3,
+  "db_path": "/Users/ryan/.local/share/vectorcode/chromadb/",
+  "db_url": "http://127.0.0.1:18000"
+}

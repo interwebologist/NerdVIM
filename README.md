@@ -35,7 +35,7 @@ This README describes the main plugins and features included in your Neovim setu
   **Note:** NerdPrompt must be installed separately.
 
 - **minuet-ai.nvim**
-  RAG-powered AI code completion using local Ollama models. Provides semantic code completions with full codebase context awareness through VectorCode integration.
+  Semantic RAG Local AI code autocompletion using local Lllama hosted qwen2.5-coder:7B-instruct model. Provides semantic code completions with full codebase context awareness through VectorCode integration.
 
 - **VectorCode**
   Semantic code indexing and RAG (Retrieval-Augmented Generation) system using `nomic-embed-text` embeddings via Ollama. Automatically indexes your codebase and retrieves relevant snippets for AI completions.

@@ -1,7 +1,7 @@
 # NerdVIM
 
 ### My Neovim AI Enabled Configuration
-UI shots (Without Autocomplete enabled.):
+UI shots (Without AI Autocomplete enabled.):
 ![NerdVIM UI Screenshot](images/UI4.png)
 ![NerdVIM UI Screenshot](images/UI3.png)
 ![NerdVIM UI Screenshot](images/UI.png)
@@ -22,7 +22,7 @@ This README describes the main plugins and features included in your Neovim setu
 
 ## Main Plugins
 
-### AI Web Search (Perpelxity.AI), AI Code Assistance (Anthropic), & AI Autocompletion w/ Codebase Semantic RAG (Llama / Qwen2.5-coder:7B-instruct)
+### AI Web Search (Perpelxity.AI), AI Code Assistance (You Pick, or CLaude Code ), & AI Autocompletion w/ Codebase Semantic RAG (Llama / Qwen2.5-coder:7B-instruct model)
 
 - **Codecompanion.nvim**
   Integrates with external AI models (e.g., Anthropic Claude) for code chat and inline assistance directly in Neovim.

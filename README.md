@@ -1,6 +1,6 @@
 # NerdVIM
 
-### Neovim Configuration
+### My Neovim AI Enabled Configuration
 UI shots:
 ![NerdVIM UI Screenshot](images/UI4.png)
 ![NerdVIM UI Screenshot](images/UI3.png)
@@ -24,17 +24,17 @@ This README describes the main plugins and features included in your Neovim setu
 
 ### AI Web Search (Perpelxity.AI), AI Code Assistance (Anthropic), & AI Autocompletion w/ Codebase Semantic RAG (Llama / Qwen2.5-coder:7B-instruct)
 
-- **codecompanion.nvim**
+- **Codecompanion.nvim**
   Integrates with external AI models (e.g., Anthropic Claude) for code chat and inline assistance directly in Neovim.
 
-- **claudecode.nvim**
+- **Claudecode.nvim**
   Native Claude Code integration via WebSocket providing real-time context tracking, diff support, and seamless Claude Code CLI integration.
 
 - **NerdPrompt**
   `<leader>np` is mapped to trigger Perplexity.AI via [NerdPrompt](https://github.com/interwebologist/NerdPrompt/tree/main), enabling you to interact with Perplexity.AI from within Neovim.
   **Note:** NerdPrompt must be installed separately.
 
-- **minuet-ai.nvim**
+- **Minuet-ai.nvim**
   Semantic RAG Local AI code autocompletion using local Lllama hosted qwen2.5-coder:7B-instruct model. Provides semantic code completions with full codebase context awareness through VectorCode integration.
 
 - **VectorCode**
@@ -52,7 +52,7 @@ This README describes the main plugins and features included in your Neovim setu
 **Usage**
 
 Normal Workflow:
-- Install VectorCode to system wide pip, not .venv for the project.
+- Install VectorCode via system wide pip, not .venv for the project.
 - Just start typing - minuet completions appear automatically in the completion menu
 - Press `<C-y>` to accept (standard blink.cmp)
 - Press `<A-y>` to manually trigger minuet completions
@@ -63,6 +63,7 @@ VectorCode Commands:
 - `:VectorCode vectorise` - Index entire project
 - `:VectorCode query <text>` - Search semantic context text
 
+You can also run at CLI command is the [DOCS](https://github.com/Davidyz/VectorCode)
 **Per-Project Setup**
 
 When you cd into a new codebase:

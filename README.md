@@ -1,7 +1,7 @@
 # NerdVIM
 
 ### My Neovim AI Enabled Configuration
-UI shots:
+UI shots (Without Autocomplete enabled.):
 ![NerdVIM UI Screenshot](images/UI4.png)
 ![NerdVIM UI Screenshot](images/UI3.png)
 ![NerdVIM UI Screenshot](images/UI.png)

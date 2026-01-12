@@ -63,7 +63,8 @@ VectorCode Commands:
 - `:VectorCode vectorise` - Index entire project
 - `:VectorCode query <text>` - Search semantic context text
 
-You can also run at CLI command is the [DOCS](https://github.com/Davidyz/VectorCode)
+You can also run at CLI commands see VectorCode [DOCS](https://github.com/Davidyz/VectorCode)
+
 **Per-Project Setup**
 
 When you cd into a new codebase:

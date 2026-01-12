@@ -38,7 +38,7 @@ This README describes the main plugins and features included in your Neovim setu
   Semantic RAG Local AI code autocompletion using local Lllama hosted qwen2.5-coder:7B-instruct model. Provides semantic code completions with full codebase context awareness through VectorCode integration.
 
 - **VectorCode**
-  Semantic code indexing and RAG (Retrieval-Augmented Generation) system using `nomic-embed-text` embeddings via Ollama. Automatically indexes your codebase and retrieves relevant snippets for AI completions.
+  Semantic code indexing and RAG (Retrieval-Augmented Generation) system using `nomic-embed-text` embedding model via ChromaDB itself (automatic). Indexes and stores your codebase (Semanticly per function, class, etc) and retrieves relevant snippets for AI completions.
 
 #### How Intelligent AI Autocomplete using Minuet & VectorCode(ChormaDB RAG) Works
 
@@ -84,7 +84,7 @@ To test the setup:
 **Troubleshooting**
 
 If completions aren't working:
-- Ensure Ollama is running: `ollama list`
+- Ensure Llama is running
 - Check VectorCode: `vectorcode version` (should be 0.7.20)
 - Verify registration: Look for VectorCode notifications when opening files
 - Check logs: `:messages` for errors

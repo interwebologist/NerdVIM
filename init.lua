@@ -412,6 +412,28 @@ require("lazy").setup({
             { "<leader>cr", "<cmd>ClaudeCodeDiffDeny<cr>",   desc = "Reject Claude diff" },
         },
     },
+    -- vim-slime: send code to tmux pane (IPython REPL workflow)
+    {
+        "jpalardy/vim-slime",
+        ft = { "python", "lua", "sh", "javascript", "typescript" },
+        init = function()
+            vim.g.slime_target = "tmux"
+            vim.g.slime_default_config = {
+                socket_name = vim.fn.split(vim.env.TMUX or "default", ",")[1] or "default",
+                target_pane = "{top-right}",
+            }
+            vim.g.slime_dont_ask_default = 1
+            vim.g.slime_bracketed_paste = 1
+            vim.g.slime_cell_delimiter = "# %%"
+        end,
+        keys = {
+            { "<leader>vs", "<cmd>SlimeConfig<cr>",     desc = "Slime: configure target pane" },
+            { "<leader>sc", "<Plug>SlimeSendCell",      desc = "Slime: send cell" },
+            { "<leader>sl", "<Plug>SlimeLineSend",      desc = "Slime: send line" },
+            { "<leader>sv", "<Plug>SlimeRegionSend",    mode = "v", desc = "Slime: send visual selection" },
+            { "<leader>sp", "<Plug>SlimeParagraphSend", desc = "Slime: send paragraph" },
+        },
+    },
     -- VectorCode for semantic RAG code search
     {
         "Davidyz/VectorCode",

@@ -1,11 +1,24 @@
 # Personal Neovim Cheatsheet
 
-## Supermaven @supermaven
+## LEADER KEY INFO @leader @keybindings
 ----------------------------------------
-Trigger  Completion | <leader>sm
-Accept  Suggestion | <Tab>
-Reject  Suggestion | <C-]>
-Show  Docs | <leader>smd
+Leader Key | \ (backslash)
+Usage | Press \ then the key combo (e.g., \t for terminal, \cc for CodeCompanion)
+Note | Leader key is Neovim's default backslash (\)
+
+## Minuet AI (RAG-powered completion) @minuet @ai @rag
+----------------------------------------
+Trigger Minuet Completion | <A-y> (Alt+y or Option+y on Mac)
+Accept Suggestion | <C-y> (Ctrl+y via blink.cmp)
+Shows in Completion Menu | Automatic with LSP
+What it does | Manually triggers AI code completion using RAG context from your codebase
+
+## VectorCode @vectorcode @rag
+----------------------------------------
+Register Buffer for RAG | :VectorCode register (auto-enabled)
+Deregister Buffer | :VectorCode deregister
+Vectorize Current Project | :VectorCode vectorise
+Query Semantic Context | :VectorCode query <text>
 
 ## CodeCompanion @codecompanion @ai
 ----------------------------------------
@@ -14,6 +27,49 @@ Accept CodeCompanion Suggestion | <leader>ca
 Reject CodeCompanion Suggestion | <leader>cr
 Toggle CodeCompanion | <leader>ct
 Show CodeCompanion Docs | <leader>cd
+
+Open Diagnostic Float | <leader>do (Must hover over line first)
+
+## Terminal @terminal @split
+----------------------------------------
+Open Terminal Split (bottom) | <leader>t
+Maximize Current Window | <leader>m
+Switch to Normal Mode from Terminal | <Esc>
+
+## NerdPrompt @nerdprompt @ai
+----------------------------------------
+Open NerdPrompt Window | <leader>np
+
+## Git Commands @git
+----------------------------------------
+Git Add/Commit/Push Current File | <leader>gcp
+
+## ClaudeCode @claudecode @ai
+----------------------------------------
+Toggle Claude Code Panel | <leader>ct
+Send Visual Selection to Claude | <leader>cs (visual mode)
+Accept Claude Diff | <leader>ca
+Reject Claude Diff | <leader>cr
+
+## vim-slime - Use Neovim + IPython in tmux like a Jupyter notebook @slime @repl @ipython
+----------------------------------------
+Configure Target Pane    | <leader>vs (set tmux target, default: top-right)
+Send Cell (# %%)         | <leader>sc (normal mode)
+Send Line                | <leader>sl (normal mode)
+Send Visual Selection    | <leader>sv (visual mode)
+Send Paragraph           | <leader>sp (normal mode)
+Cell Delimiter           | # %% (marks start of a new cell)
+
+## Cheatsheet @help @cheatsheet
+----------------------------------------
+Open Cheatsheet | <leader>?
+
+## Claude Code @claudecode @ai
+----------------------------------------
+Toggle Claude Code Terminal | <leader>ct
+Send Selection to Claude | <leader>cs
+Accept Claude Diff | <leader>ca
+Reject Claude Diff | <leader>cr
 
 ## blink.cmp @blink @cmp
 ----------------------------------------
@@ -51,6 +107,10 @@ Resize Window Left | <C-w><
 Resize Window Right | <C-w>>
 Resize Window Up | <C-w>+
 Resize Window Down | <C-w>-
+
+## Diagnostics @diagnostics @gutter
+----------------------------------------
+Open Diagnostic Float/Gutter Dialog | <leader>do
 
 ## pylint @pylint @lint
 ----------------------------------------

@@ -20,131 +20,50 @@ Python, Lua, Javascript, Typescript, Bash support. Add your own!
 
 This README describes the main plugins and features included in your Neovim setup, based on your `init.lua`. It highlights the primary plugins, their purpose, and how they enhance your workflow.
 
-## Main Plugins
-
-- **Codecompanion.nvim**
-  Integrates with external AI models (e.g., Anthropic Claude) for code chat and inline assistance directly in Neovim.
-
-- **Claudecode.nvim**
-
-### AI & Code Assistance
-
-### AI Web Search (Perpelxity.AI), AI Code Assistance (You Pick, or CLaude Code ), & AI Autocompletion w/ Codebase Semantic RAG (Llama / Qwen2.5-coder:7B-instruct model)
-- **supermaven-nvim**  
-  AI-powered code completion, providing context-aware suggestions as you type. I find this much faster with better 
-  suggestions than github copilot.
-
-- **NerdPrompt**  
-  `<leader>np` is mapped to trigger Perplexity.AI via [NerdPrompt](https://github.com/interwebologist/NerdPrompt/tree/main), enabling you to interact with Perplexity.AI from within Neovim.
-  Designed to match your themes and the terminal with ascii art instead of markdown in terminal
-  **Note:** NerdPrompt must be installed separately.
-
-  ### Pick your AI Coder.
-  I started with CodeCompanion , but using ClaudeCode now. Leaving CodeCompanion for my local LLM experiments.
-
-- **codecompanion.nvim**  
-  Integrates with external AI models (e.g., Anthropic Claude) for code chat and inline assistance directly in Neovim.
-
-- **ClaudeCode.vim**
-  ClaudeCode integrated with NeoVIM
-
-- **minuet-ai.nvim**
-  RAG-powered AI code completion using local Ollama models. Provides semantic code completions with full codebase context awareness through VectorCode integration.
-
-- **VectorCode**
-  Semantic code indexing and RAG (Retrieval-Augmented Generation) system using `nomic-embed-text` embeddings via Ollama. Automatically indexes your codebase and retrieves relevant snippets for AI completions.
-
-- **codecompanion.nvim**
-  Integrates with external AI models (e.g., Anthropic Claude) for code chat and inline assistance directly in Neovim.
-
-- **claudecode.nvim**
-
-- **NerdPrompt**
-  `<leader>np` is mapped to trigger Perplexity.AI via [NerdPrompt](https://github.com/interwebologist/NerdPrompt/tree/main), enabling you to interact with Perplexity.AI from within Neovim.
-  **Note:** NerdPrompt must be installed separately.
-<<<<<<< HEAD
-
-- **Minuet-ai.nvim**
-  Semantic RAG Local AI code autocompletion using local Lllama hosted qwen2.5-coder:7B-instruct model. Provides semantic code completions with full codebase context awareness through VectorCode integration.
-
-- **VectorCode**
-  Semantic code indexing and RAG (Retrieval-Augmented Generation) system using `nomic-embed-text` embedding model via ChromaDB itself (automatic). Indexes and stores your codebase (Semanticly per function, class, etc) and retrieves relevant snippets for AI completions. 
-
-#### How Intelligent AI Autocomplete using Minuet & VectorCode(ChormaDB RAG) Works
-
-**Semantic RAG Flow:**
-1. VectorCode continuously indexes your codebase using `nomic-embed-text` embeddings if you set this up in pre-commit hook or run the command on the repo.
-2. When you type, VectorCode retrieves the 3 most semantically relevant code snippets
-3. Minuet sends these snippets + your current context to Llama-server's `qwen2.5-coder:7B-instruct` (6GB) model (In My personal case)
-
-#### How It Works
-
-**Semantic RAG Flow:**
-1. VectorCode continuously indexes your codebase using `nomic-embed-text` embeddings (Ollama runs at startup)
-2. When you type, VectorCode retrieves the 3 most semantically relevant code snippets
-3. Minuet sends these snippets + your current context to Ollama's `qwen2.5-coder` model
-4. The FIM model generates completions aware of your entire codebase
-5. Completions appear in blink.cmp alongside LSP suggestions
-
-**Usage**
-
-Normal Workflow:
-- Install VectorCode via system wide pip, not .venv for the project.
-- Just start typing - minuet completions appear automatically in the completion menu
-- Press `<C-y>` to accept (standard blink.cmp)
-- Press `<A-y>` to manually trigger minuet completions
-
-VectorCode Commands:
-- `:VectorCode register` - Manually register current buffer 
-- `:VectorCode deregister` - Stop RAG for current buffer
-- `:VectorCode vectorise` - Index entire project
-- `:VectorCode query <text>` - Search semantic context text
-
-You can also run at CLI commands see VectorCode [DOCS](https://github.com/Davidyz/VectorCode)
-- `:VectorCode register` - Manually register current buffer (auto-enabled)
-- `:VectorCode deregister` - Stop RAG for current buffer
-- `:VectorCode vectorise` - Index entire project
-- `:VectorCode query <text>` - Search semantic context
-
-**Per-Project Setup**
-
-When you cd into a new codebase:
-1. VectorCode will create a `.vectorcode/` directory in that project
-2. Buffers auto-register on file open
-3. Each project maintains its own semantic index
-4. RAG context is project-specific
-
-**Testing**
-
-To test the setup:
-1. Reload Neovim (restart nvim or `:Lazy sync`)
-2. Open a Python/Lua/JS file in any project
-3. Start typing a function - you should see completions with RAG context
-4. Check `:messages` for VectorCode registration notifications
-
-**Troubleshooting**
-
-If completions aren't working:
-- Ensure Llama is running
-- Check VectorCode: `vectorcode version` (should be 0.7.20)
-- Verify registration: Look for VectorCode notifications when opening files
-- Check logs: `:messages` for errors
-
-### AI Completion - Alt-y
-**`Alt-y` (Option-y on Mac)**: Manually trigger Minuet AI completion with RAG context
-- Queries your codebase semantically via VectorCode
-- Sends relevant code snippets to Llama `qwen2.5-coder:7B-instruct-Q5_K_M.GGUF` model. My research shows this is on of the better model currently.
-- Generates context-aware completions using FIM (Fill-In-Middle)
-- Ensure Ollama is running: `ollama list`
-- Check VectorCode: `vectorcode version` (should be 0.7.20)
-- Verify registration: Look for VectorCode notifications when opening files
-- Check logs: `:messages` for errors
-
 ## Key Features & Custom Mappings
 
 ### Leader Key
 **The leader key is `\` (backslash)** - Neovim's default. All `<leader>` keybindings use backslash.
 **Usage:** Press `\` followed by the key combo (e.g., `\t` for terminal, `\cc` for CodeCompanion)
+
+  - `t`: Open a terminal at the bottom split.
+  - `m`: Maximize current window.
+  - `np`: Open a "nerdprompt" terminal with user input.
+  - `gcp`: Add, commit, and push current file with a prompted git commit message while inside a git repo.
+  - `ct`: Toggle Claude Code terminal.
+  - `cs`: Send visual selection to Claude Code (visual mode).
+  - `ca`: Accept Claude Code diff suggestions.
+  - `cr`: Reject Claude Code diff suggestions.
+  - `sc`: vim-slime sends current cell to tmux top right ipython instance (use '# %%' to mark cell). Makes NVIM more like Jupyter Notebook
+  - `sv`: vim-slime sends code in visual mode
+  - `?` : Cheatsheet Holding extensive list of leader commands like there (Update cheatsheet.txt to add more)
+  - `do`: Expands gutter message error and warning message.
+
+## Main Plugins
+
+### AI Web Search
+- **NerdPrompt**  
+  `<leader>np` is mapped to trigger Perplexity.AI via [NerdPrompt](https://github.com/interwebologist/NerdPrompt/tree/main), enabling you to interact with Perplexity.AI from within Neovim.
+  Designed to match your themes and the terminal with ascii art instead of markdown in terminal
+  **Note:** NerdPrompt must be installed separately.
+
+### AI Code Tools
+  I started with CodeCompanion , but using ClaudeCode now. Leaving CodeCompanion for my local LLM experiments.
+
+- **codecompanion.nvim**  
+  Integrates with external AI models (e.g., Anthropic Claude) for code chat and inline assistance directly in Neovim.
+
+- **claudecode.vim**
+  ClaudeCode integrated with NeoVIM. Agent type work or chat
+
+- **minuet-ai.nvim**
+  RAG-powered AI code completion using local Ollama models. Provides semantic code completions with full codebase context awareness through VectorCode integration. Uses VectorCode
+
+- **vectorcode**
+  Semantic code indexing and RAG (Retrieval-Augmented Generation) system using `nomic-embed-text` embeddings via Ollama. Automatically indexes your codebase and retrieves relevant snippets for AI completions. 
+  Uses fill-in-the-middle LLM model
+
+### Productivity
 
 - **Mini and Rest Break Timers**
   Get reminders to take a microbreak and a restbreak. Currently disabled
@@ -158,15 +77,9 @@ If completions aren't working:
 - **Python-centric Indentation**  
   Tabs and indentation are set to 4 spaces, tailored for Python development.
 
-- **Custom Terminal and Window Shortcuts**  
-  - `t`: Open a terminal at the bottom split.
-  - `m`: Maximize current window.
-  - `np`: Open a "nerdprompt" terminal with user input.
-  - `gcp`: Add, commit, and push current file with a prompted git commit message while inside a git repo.
-  - `ct`: Toggle Claude Code terminal.
-  - `cs`: Send visual selection to Claude Code (visual mode).
-  - `ca`: Accept Claude Code diff suggestions.
-  - `cr`: Reject Claude Code diff suggestions.
+- **Vim-Slime**
+  Send code in cell (# %% delimter to mark each cell) to tmux top right pane, use ipython to create jupyter notebook like experience 
+
 
 - **Auto-linting and Formatting**  
   Linting and formatting are triggered automatically on file save and buffer enter.
@@ -230,3 +143,67 @@ If completions aren't working:
   (As a dependency) Collection of community-driven code snippets for use with completion engines.
 
 ---
+
+#### How Intelligent AI Autocomplete using Minuet & VectorCode(ChormaDB RAG) Works
+
+**Semantic RAG Flow:**
+1. VectorCode continuously indexes your codebase using `nomic-embed-text` embeddings (Ollama runs at startup)
+2. When you type, VectorCode retrieves the 3 most semantically relevant code snippets
+3. Minuet sends these snippets + your current context to Ollama's `qwen2.5-coder` model
+4. The FIM model generates completions aware of your entire codebase
+5. Completions appear in blink.cmp alongside LSP suggestions
+
+**Usage**
+
+Normal Workflow:
+- Install VectorCode via system wide pip, not .venv for the project.
+- Just start typing - minuet completions appear automatically in the completion menu
+- Press `<C-y>` to accept (standard blink.cmp)
+- Press `<A-y>` to manually trigger minuet completions
+
+VectorCode Commands:
+- `:VectorCode register` - Manually register current buffer 
+- `:VectorCode deregister` - Stop RAG for current buffer
+- `:VectorCode vectorise` - Index entire project
+- `:VectorCode query <text>` - Search semantic context text
+
+You can also run at CLI commands see VectorCode [DOCS](https://github.com/Davidyz/VectorCode)
+- `:VectorCode register` - Manually register current buffer (auto-enabled)
+- `:VectorCode deregister` - Stop RAG for current buffer
+- `:VectorCode vectorise` - Index entire project
+- `:VectorCode query <text>` - Search semantic context
+
+**Per-Project Setup**
+
+When you cd into a new codebase:
+1. VectorCode will create a `.vectorcode/` directory in that project
+2. Buffers auto-register on file open
+3. Each project maintains its own semantic index
+4. RAG context is project-specific
+
+**Testing**
+
+To test the setup:
+1. Reload Neovim (restart nvim or `:Lazy sync`)
+2. Open a Python/Lua/JS file in any project
+3. Start typing a function - you should see completions with RAG context
+4. Check `:messages` for VectorCode registration notifications
+
+**Troubleshooting**
+
+If completions aren't working:
+- Ensure Llama is running
+- Check VectorCode: `vectorcode version` (should be 0.7.20)
+- Verify registration: Look for VectorCode notifications when opening files
+- Check logs: `:messages` for errors
+
+### AI Completion - Alt-y
+**`Alt-y` (Option-y on Mac)**: Manually trigger Minuet AI completion with RAG context
+- Queries your codebase semantically via VectorCode
+- Sends relevant code snippets to Llama `qwen2.5-coder:7B-instruct-Q5_K_M.GGUF` model. My research shows this is on of the better model currently.
+- Generates context-aware completions using FIM (Fill-In-Middle)
+- Ensure Ollama is running: `ollama list`
+- Check VectorCode: `vectorcode version` (should be 0.7.20)
+- Verify registration: Look for VectorCode notifications when opening files
+- Check logs: `:messages` for errors
+

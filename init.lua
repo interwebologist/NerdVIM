@@ -316,9 +316,9 @@ require("lazy").setup({
             --
             -- See :h blink-cmp-config-keymap for defining your own keymap
             keymap = {
-                preset = 'default',
-                ['<A-y>'] = function(cmp) require('minuet').make_blink_map()(cmp) end,
-            },
+                   preset = 'default',
+                   ['<A-y>'] = false,  -- Disable to get Neovim working, fix minuet integration later
+               },
 
             appearance = {
                 -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
@@ -494,10 +494,13 @@ require("lazy").setup({
                 },
             }
 
-            require("minuet").setup {
-                provider = "openai_fim_compatible",
-                provider_options = provider_options,
-            }
+          require("minuet").setup {
+                 provider = "openai_fim_compatible",
+                 provider_options = provider_options,
+             }
+             vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter" }, {
+   command = "checktime"
+ })
         end,
     },
 })

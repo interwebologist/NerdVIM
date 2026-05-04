@@ -207,3 +207,4 @@ If completions aren't working:
 - Verify registration: Look for VectorCode notifications when opening files
 - Check logs: `:messages` for errors
 
+ ** added autoreload for working with Coding Agents **  

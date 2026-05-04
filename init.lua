@@ -315,10 +315,10 @@ require("lazy").setup({
             -- C-k: Toggle signature help (if signature.enabled = true)
             --
             -- See :h blink-cmp-config-keymap for defining your own keymap
-            keymap = {
-                   preset = 'default',
-                   ['<A-y>'] = false,  -- Disable to get Neovim working, fix minuet integration later
-               },
+          keymap = {
+                    preset = 'default',
+                    ['<A-y>'] = true,  -- Enable Minuet AI completion trigger
+                },
 
             appearance = {
                 -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
